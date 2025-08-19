@@ -11,6 +11,7 @@ public class ClienteDTO {
     private String email;
     private String telefone;
     private String cpf;
+    private String status;
     private LocalDateTime criadoEm;
     private LocalDateTime atualizadoEm;
 }
