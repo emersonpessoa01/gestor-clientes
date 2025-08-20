@@ -23,27 +23,29 @@ public class Cliente {
 
     @NotBlank(message = "Nome é obrigatório")
     @Size(min = 3, message = "Nome deve ter no mínimo 3 caracteres")
+    @Column(nullable = false)
     private String nome;
 
     @NotBlank(message = "Email é obrigatório")
     @Email(message = "Email inválido")
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String telefone; // Opcional, validado no service se presente
 
     @NotBlank(message = "CPF é obrigatório")
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String cpf; // Validado no service
 
     @NotNull
-    @Column(columnDefinition = "VARCHAR(20)")
+    @Column(nullable = false, columnDefinition = "VARCHAR(20)")
     private String status = "ATIVO"; // Default ATIVO
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime atualizadoEm;
 }
