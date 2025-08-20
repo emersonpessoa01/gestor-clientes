@@ -50,10 +50,10 @@ public class ClienteService {
         if (!isCpfValido(dto.getCpf())) {
             throw new IllegalArgumentException("CPF inválido");
         }
-        if (repository.findByCpf(dto.getCpf()).isPresent()) {
+        if (repository.findByCpfOrderByIdAsc(dto.getCpf()).isPresent()) {
             throw new IllegalArgumentException("CPF já cadastrado");
         }
-        if (repository.findByEmail(dto.getEmail()).isPresent()) {
+        if (repository.findByEmailOrderByIdAsc(dto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
         if (!isTelefoneValido(dto.getTelefone())) {
@@ -83,15 +83,13 @@ public class ClienteService {
     public List<ClienteDTO> findAll(String status, String nome) {
         List<Cliente> clientes;
         if (status != null && nome != null) {
-            clientes = repository.findByNomeContainingIgnoreCase(nome).stream()
-                    .filter(c -> c.getStatus().equalsIgnoreCase(status))
-                    .collect(Collectors.toList());
+            clientes = repository.findByStatusAndNomeContainingIgnoreCaseOrderByIdAsc(status.toUpperCase(),nome);
         } else if (status != null) {
-            clientes = repository.findByStatus(status.toUpperCase());
+            clientes = repository.findByStatusOrderByIdAsc(status.toUpperCase());
         } else if (nome != null) {
-            clientes = repository.findByNomeContainingIgnoreCase(nome);
+            clientes = repository.findByNomeContainingIgnoreCaseOrderByIdAsc(nome);
         } else {
-            clientes = repository.findAll();
+            clientes = repository.findAllByOrderByIdAsc();
         }
         return clientes.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
@@ -103,7 +101,7 @@ public class ClienteService {
         // Proibir atualização de CPF
         // Email pode ser atualizado, mas checar unicidade se alterado
         if (!cliente.getEmail().equals(dto.getEmail())) {
-            if (repository.findByEmail(dto.getEmail()).isPresent()) {
+            if (repository.findByEmailOrderByIdAsc(dto.getEmail()).isPresent()) {
                 throw new IllegalArgumentException("Email já cadastrado");
             }
         }
@@ -127,6 +125,9 @@ public class ClienteService {
     public void delete(Long id) {
         Cliente cliente = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+        if("INATIVO".equalsIgnoreCase(cliente.getStatus())){
+            throw new IllegalArgumentException("Cliente já está inativo");
+        }
         cliente.setStatus("INATIVO");
         repository.save(cliente);
     }
