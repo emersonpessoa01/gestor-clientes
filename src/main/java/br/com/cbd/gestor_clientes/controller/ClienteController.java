@@ -64,7 +64,7 @@ public class ClienteController {
     @Operation(
             summary = "Listar clientes",
             description = "Retorna uma lista de clientes com filtros opcionais por status (ATIVO, INATIVO, PROSPECT) e/ou nome (busca parcial, case-insensitive). " +
-                    "Se nenhum filtro for fornecido, retorna todos os clientes."
+                    "Se nenhum filtro for fornecido, retorna todos os clientes, ordenados por ID em ordem crescente."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lista de clientes retornada com sucesso", content = @Content(schema = @Schema(implementation = ClienteDTO.class), array = @ArraySchema)),
