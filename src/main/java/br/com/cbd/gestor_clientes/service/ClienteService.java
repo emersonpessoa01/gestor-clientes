@@ -47,6 +47,10 @@ public class ClienteService {
     }
 
     public ClienteDTO create(CreateClienteDTO dto) {
+        //Validação explícita do nome
+        if(dto.getNome() == null || dto.getNome().length() < 3){
+            throw new IllegalArgumentException("O nome deve ter pelo menos 3 caracteres");
+        }
         if (!isCpfValido(dto.getCpf())) {
             throw new IllegalArgumentException("CPF inválido");
         }
