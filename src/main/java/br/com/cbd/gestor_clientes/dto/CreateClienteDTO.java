@@ -11,7 +11,6 @@ import lombok.Data;
 @Data
 public class CreateClienteDTO {
     @NotBlank(message = "Nome é obrigatório")
-    @Size(min = 3, message = "Nome deve ter no mínimo 3 caracteres")
     @Schema(description = "Nome do cliente", example = "João Silva")
     private String nome;
 
