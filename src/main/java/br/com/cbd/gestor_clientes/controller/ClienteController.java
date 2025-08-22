@@ -1,4 +1,3 @@
-
 package br.com.cbd.gestor_clientes.controller;
 
 import br.com.cbd.gestor_clientes.dto.ClienteDTO;
@@ -24,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/clientes")
 @Tag(name = "Gestor de Clientes", description = "API para gerenciamento de clientes (cadastro, consulta, atualização e inativação)")
+@CrossOrigin(origins = "*")
 public class ClienteController {
 
     @Autowired
@@ -115,6 +115,20 @@ public class ClienteController {
             @PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @Operation(
+            summary = "Validar CPF",
+            description = "Verifica se um CPF é válido em formato (não verifica existência real)."
+    )
+    @GetMapping("/validate-cpf")
+    public ResponseEntity<String> validateCpf(
+            @Parameter(description = "CPF a validar (ex.: 111.444.777-35)", required = true, example = "111.444.777-35")
+            @RequestParam String cpf) {
+        if (cpf == null || cpf.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("CPF não pode ser vazio");
+        }
+        boolean valido = service.isCpfValido(cpf);
+        return ResponseEntity.ok(valido ? "Válido" : "Inválido");
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
