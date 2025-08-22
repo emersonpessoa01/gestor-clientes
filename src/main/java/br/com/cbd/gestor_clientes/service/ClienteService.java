@@ -18,7 +18,7 @@ public class ClienteService {
     private ClienteRepository repository;
 
     // Utilitário para validar CPF (simples algoritmo de verificação)
-    private boolean isCpfValido(String cpf) {
+    public boolean isCpfValido(String cpf) {
         cpf = cpf.replaceAll("\\D", ""); // Remove não dígitos
         if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) return false;
 
