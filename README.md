@@ -96,6 +96,10 @@ Este pacote contém as entidades, repositórios, serviços e controladores que f
      ```
      http://localhost:8081/swagger-ui/index.html
      ```
+   - **Validador de CPF**: Acesse a interface web em:
+      ```
+     http://localhost:8081/cpf-validator.html (requer a aplicação em execução).
+     ```
      No Swagger UI, você pode visualizar todos os endpoints, testar chamadas diretamente no navegador e verificar exemplos de requisições e respostas.
 
 ---
@@ -120,6 +124,7 @@ path:
 | `GET`   | `/clientes`             | Lista clientes com filtros opcionais   |
 | `PUT`   | `/clientes/{id}`        | Atualiza um cliente existente          |
 | `DELETE`| `/clientes/{id}`        | Realiza exclusão lógica (status=INATIVO) |
+| `GET`   | `/cpf-validator?cpf=...`| Valida um CPF e retorna se é válido    |
 
 ### Detalhes dos Endpoints
 - **GET /clientes**: Retorna clientes ordenados por `id` em ordem ascendente. Suporta filtros opcionais por `status` (ATIVO, INATIVO, PROSPECT) e/ou `nome` (busca parcial, case-insensitive).
