@@ -106,7 +106,7 @@ Este pacote contém as entidades, repositórios, serviços e controladores que f
 
 📦 Importação da coleção de testes no Insomnia:
 
-[Download da coleção](./api-collections/Insomnia_2025-08-21.yaml)
+[Download da coleção](./api-collections/Insomnia_2025-08-22.yaml)
 
 path:
 
