@@ -124,7 +124,7 @@ path:
 | `GET`   | `/clientes`             | Lista clientes com filtros opcionais   |
 | `PUT`   | `/clientes/{id}`        | Atualiza um cliente existente          |
 | `DELETE`| `/clientes/{id}`        | Realiza exclusão lógica (status=INATIVO) |
-| `GET`   | `/cpf-validator?cpf=...`| Valida um CPF e retorna se é válido    |
+| `GET`   | `/clientes/validate-cpf?cpf=11144477735`| Valida um CPF e retorna se é válido    |
 
 ### Detalhes dos Endpoints
 - **GET /clientes**: Retorna clientes ordenados por `id` em ordem ascendente. Suporta filtros opcionais por `status` (ATIVO, INATIVO, PROSPECT) e/ou `nome` (busca parcial, case-insensitive).
