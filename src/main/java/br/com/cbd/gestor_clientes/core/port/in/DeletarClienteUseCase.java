@@ -1,4 +1,5 @@
 package br.com.cbd.gestor_clientes.core.port.in;
 
-public class DeletarClienteUseCase {
+public interface DeletarClienteUseCase {
+    void execute(Long id);
 }

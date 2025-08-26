@@ -1,4 +1,9 @@
 package br.com.cbd.gestor_clientes.core.port.in;
 
-public class BuscarClienteUseCase {
+import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
+
+import java.util.Optional;
+
+public interface BuscarClienteUseCase {
+    Optional<Cliente> execute(Long id);
 }
