@@ -53,7 +53,9 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
             return ps;
         }, keyHolder);
         Long id = keyHolder.getKey().longValue();
-        // Consultar o registro para pegar os timestamps
+        cliente.setId(id);
+
+        // Para recuperar os timestamps, mantenha a consulta SELECT
         String selectSql = "SELECT * FROM cliente WHERE id = ?";
         Cliente savedCliente = jdbcTemplate.queryForObject(selectSql, rowMapper, id);
         return savedCliente != null ? savedCliente : cliente;
