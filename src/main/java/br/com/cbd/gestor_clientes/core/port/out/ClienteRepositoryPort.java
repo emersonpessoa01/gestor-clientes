@@ -1,0 +1,14 @@
+package br.com.cbd.gestor_clientes.core.port.out;
+
+import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface ClienteRepositoryPort {
+    Cliente save(Cliente cliente);
+    Optional<Cliente> findById(Long id);
+    List<Cliente> findAll();
+    Cliente update(Cliente cliente);
+    void delete(Long id);
+}
