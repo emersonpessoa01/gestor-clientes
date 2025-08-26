@@ -11,4 +11,6 @@ public interface ClienteRepositoryPort {
     List<Cliente> findAll();
     Cliente update(Cliente cliente);
     void delete(Long id);
+    boolean existsByCpf(String cpf); // Para validar duplicidade de CPF
+    boolean existsByEmail(String email); // Para validar duplicidade de Email
 }
