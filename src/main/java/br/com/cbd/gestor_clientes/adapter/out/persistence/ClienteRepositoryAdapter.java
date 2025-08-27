@@ -7,7 +7,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -82,5 +85,19 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
     public void delete(Long id) {
         String sql = "DELETE FROM cliente WHERE id = ?";
         jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public boolean existsByCpf(String cpf) {
+        String sql = "SELECT COUNT(*) FROM cliente WHERE cpf = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, cpf);
+        return count != null && count > 0;
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT COUNT(*) FROM cliente WHERE email = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
+        return count != null && count > 0;
     }
 }
