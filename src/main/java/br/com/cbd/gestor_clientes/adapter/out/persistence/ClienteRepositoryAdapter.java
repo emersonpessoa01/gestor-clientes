@@ -42,7 +42,7 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO cliente (nome, email, telefone, cpf, status) VALUES (?, ?, ?, ?, ?)",
+                    "INSERT INTO cliente (nome, email, telefone, cpf, status, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     new String[]{"id"}
             );
             ps.setString(1, cliente.getNome());
@@ -50,12 +50,13 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
             ps.setString(3, cliente.getTelefone());
             ps.setString(4, cliente.getCpf());
             ps.setString(5, cliente.getStatus());
+            ps.setObject(6, LocalDateTime.now());
+            ps.setObject(7, LocalDateTime.now());
             return ps;
         }, keyHolder);
         Long id = keyHolder.getKey().longValue();
         cliente.setId(id);
 
-        // Para recuperar os timestamps, mantenha a consulta SELECT
         String selectSql = "SELECT * FROM cliente WHERE id = ?";
         Cliente savedCliente = jdbcTemplate.queryForObject(selectSql, rowMapper, id);
         return savedCliente != null ? savedCliente : cliente;
@@ -70,15 +71,17 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
 
     @Override
     public List<Cliente> findAll() {
-        String sql = "SELECT * FROM cliente";
+        String sql = "SELECT * FROM cliente ORDER BY id ASC"; // Ordenação ascendente por ID
         return jdbcTemplate.query(sql, rowMapper);
     }
 
     @Override
     public Cliente update(Cliente cliente) {
-        String sql = "UPDATE cliente SET nome = ?, email = ?, telefone = ?, cpf = ?, status = ? WHERE id = ?";
-        jdbcTemplate.update(sql, cliente.getNome(), cliente.getEmail(), cliente.getTelefone(), cliente.getCpf(), cliente.getStatus(), cliente.getId());
-        return cliente;
+        String sql = "UPDATE cliente SET nome = ?, email = ?, telefone = ?, cpf = ?, status = ?, atualizado_em = ? WHERE id = ?";
+        jdbcTemplate.update(sql, cliente.getNome(), cliente.getEmail(), cliente.getTelefone(), cliente.getCpf(), cliente.getStatus(), LocalDateTime.now(), cliente.getId());
+        String selectSql = "SELECT * FROM cliente WHERE id = ?";
+        Cliente updatedCliente = jdbcTemplate.queryForObject(selectSql, rowMapper, cliente.getId());
+        return updatedCliente != null ? updatedCliente : cliente;
     }
 
     @Override
