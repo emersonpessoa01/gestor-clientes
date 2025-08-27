@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-
-
 public class Cliente {
     private Long id;
     private String nome;
@@ -22,11 +20,11 @@ public class Cliente {
 
     // Construtores, getters e setters
 
-
     public Cliente() {
     }
 
-    public Cliente(Long id, String nome, String email, String telefone, String cpf, String status, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public Cliente(Long id, String nome, String email, String telefone, String cpf, String status,
+            LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.nome = nome;
         this.email = email;

@@ -27,8 +27,8 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     public ClienteController(CriarClienteUseCase criarUseCase, AtualizarClienteUseCase atualizarUseCase,
-                             DeletarClienteUseCase deletarUseCase, BuscarClienteUseCase buscarUseCase,
-                             ListarClienteUseCase listarUseCase, ClienteMapper mapper, ClienteService clienteService) {
+            DeletarClienteUseCase deletarUseCase, BuscarClienteUseCase buscarUseCase,
+            ListarClienteUseCase listarUseCase, ClienteMapper mapper, ClienteService clienteService) {
         this.criarUseCase = criarUseCase;
         this.atualizarUseCase = atualizarUseCase;
         this.deletarUseCase = deletarUseCase;
@@ -60,25 +60,26 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteResponse> buscar(@PathVariable Long id) {
-        Cliente cliente =  buscarUseCase.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("Cliente com ID " + id + " não encontrado."));
+        Cliente cliente = buscarUseCase.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente com ID " + id + " não encontrado."));
         return ResponseEntity.ok(mapper.toResponse(cliente));
     }
 
     @GetMapping
     public ResponseEntity<List<ClienteResponse>> listar() {
         List<Cliente> clientes = listarUseCase.findAll();
-        List<ClienteResponse> responseList = mapper.toResponseList(clientes); // Assume que ClienteMapper tem toResponseList
+        List<ClienteResponse> responseList = mapper.toResponseList(clientes); // Assume que ClienteMapper tem
+                                                                              // toResponseList
         return ResponseEntity.ok(responseList);
     }
+
     @GetMapping("/validate-cpf")
     public ResponseEntity<String> validateCpf(
-            @Parameter(description = "CPF a validar(ex: 111.444.777-35)",required =true, example = "111.444.777-35") @RequestParam String cpf
-    ){
-        if(cpf == null || cpf.isEmpty()){
+            @Parameter(description = "CPF a validar(ex: 111.444.777-35)", required = true, example = "111.444.777-35") @RequestParam String cpf) {
+        if (cpf == null || cpf.isEmpty()) {
             return ResponseEntity.badRequest().body("CPF não pode ser vazio.");
         }
-    boolean valido = clienteService.validarCpf(cpf);
+        boolean valido = clienteService.validarCpf(cpf);
         return ResponseEntity.ok(valido ? "CPF válido." : "CPF inválido.");
     }
 }

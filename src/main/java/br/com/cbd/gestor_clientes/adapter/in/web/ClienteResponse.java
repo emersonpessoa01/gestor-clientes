@@ -21,7 +21,9 @@ public class ClienteResponse {
     // Construtores, getters e setters
     public ClienteResponse() {
     }
-    public ClienteResponse(Long id, String nome, String email, String telefone, String cpf, String status, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+
+    public ClienteResponse(Long id, String nome, String email, String telefone, String cpf, String status,
+            LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.nome = nome;
         this.email = email;

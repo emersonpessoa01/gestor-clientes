@@ -41,8 +41,7 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO cliente (nome, email, telefone, cpf, status, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    new String[]{"id"}
-            );
+                    new String[] { "id" });
             ps.setString(1, cliente.getNome());
             ps.setString(2, cliente.getEmail());
             ps.setString(3, cliente.getTelefone());
@@ -76,7 +75,8 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
     @Override
     public Cliente update(Cliente cliente) {
         String sql = "UPDATE cliente SET nome = ?, email = ?, telefone = ?, cpf = ?, status = ?, atualizado_em = ? WHERE id = ?";
-        jdbcTemplate.update(sql, cliente.getNome(), cliente.getEmail(), cliente.getTelefone(), cliente.getCpf(), cliente.getStatus(), LocalDateTime.now(), cliente.getId());
+        jdbcTemplate.update(sql, cliente.getNome(), cliente.getEmail(), cliente.getTelefone(), cliente.getCpf(),
+                cliente.getStatus(), LocalDateTime.now(), cliente.getId());
         String selectSql = "SELECT * FROM cliente WHERE id = ?";
         Cliente updatedCliente = jdbcTemplate.queryForObject(selectSql, rowMapper, cliente.getId());
         return updatedCliente != null ? updatedCliente : cliente;

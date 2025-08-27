@@ -7,10 +7,16 @@ import java.util.Optional;
 
 public interface ClienteRepositoryPort {
     Cliente save(Cliente cliente);
+
     Optional<Cliente> findById(Long id);
+
     List<Cliente> findAll();
+
     Cliente update(Cliente cliente);
+
     void delete(Long id);
+
     boolean existsByCpf(String cpf); // Para validar duplicidade de CPF
+
     boolean existsByEmail(String email); // Para validar duplicidade de Email
 }

@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseCase, DeletarClienteUseCase, BuscarClienteUseCase, ListarClienteUseCase {
+public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseCase, DeletarClienteUseCase,
+        BuscarClienteUseCase, ListarClienteUseCase {
 
     private final ClienteRepositoryPort repository;
 
@@ -66,7 +67,7 @@ public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseC
 
     @Override
     public Optional<Cliente> findById(Long id) {
-        Optional<Cliente>cliente = repository.findById(id);
+        Optional<Cliente> cliente = repository.findById(id);
         if (cliente.isEmpty()) {
             throw new IllegalArgumentException("Cliente com ID " + id + " não encontrado.");
         }
@@ -88,7 +89,8 @@ public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseC
         if (!cliente.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             throw new IllegalArgumentException("Email inválido: " + cliente.getEmail());
         }
-        if (cliente.getStatus() == null || !List.of("ATIVO", "INATIVO", "PROSPECT").contains(cliente.getStatus().toUpperCase())) {
+        if (cliente.getStatus() == null
+                || !List.of("ATIVO", "INATIVO", "PROSPECT").contains(cliente.getStatus().toUpperCase())) {
             throw new IllegalArgumentException("Status deve ser ATIVO, INATIVO ou PROSPECT.");
         }
         if (cliente.getCpf() != null && !validarCpf(cliente.getCpf())) {
@@ -109,7 +111,8 @@ public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseC
         if (!cliente.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             throw new IllegalArgumentException("Email inválido: " + cliente.getEmail());
         }
-        if (cliente.getStatus() == null || !List.of("ATIVO", "INATIVO", "PROSPECT").contains(cliente.getStatus().toUpperCase())) {
+        if (cliente.getStatus() == null
+                || !List.of("ATIVO", "INATIVO", "PROSPECT").contains(cliente.getStatus().toUpperCase())) {
             throw new IllegalArgumentException("Status deve ser ATIVO, INATIVO ou PROSPECT.");
         }
         if (cliente.getTelefone() != null && !validarTelefone(cliente.getTelefone())) {
@@ -118,9 +121,11 @@ public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseC
     }
 
     public boolean validarCpf(String cpf) {
-        if (cpf == null || cpf.isBlank()) return false;
+        if (cpf == null || cpf.isBlank())
+            return false;
         cpf = cpf.replaceAll("\\D", ""); // Remove não dígitos
-        if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) return false;
+        if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}"))
+            return false;
 
         try {
             int[] digits = cpf.chars().map(c -> c - '0').toArray();
@@ -141,7 +146,8 @@ public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseC
     }
 
     private boolean validarTelefone(String telefone) {
-        if (telefone == null || telefone.isBlank()) return true; // Opcional
+        if (telefone == null || telefone.isBlank())
+            return true; // Opcional
         return telefone.matches("^\\+\\d{2}\\s?\\(?\\d{2}\\)?\\s? \\d{4,5}-?\\d{4}$"); // Formato DDI+DDD+numero
     }
 }

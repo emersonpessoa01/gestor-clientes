@@ -10,6 +10,7 @@ public class ClienteRequest {
     // Construtores, getters e setters
     public ClienteRequest() {
     }
+
     public ClienteRequest(String nome, String email, String telefone, String cpf, String status) {
         this.nome = nome;
         this.email = email;
