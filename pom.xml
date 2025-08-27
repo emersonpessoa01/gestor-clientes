@@ -16,6 +16,11 @@
 	<properties>
 		<java.version>21</java.version>
 		<springdoc.version>2.6.0</springdoc.version>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -39,11 +44,6 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -73,25 +73,53 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
 			<version>1.6.3</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<!-- Removida a tag <encoding> aqui, pois não é válida diretamente -->
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>${maven-compiler-plugin.version}</version>
-			<configuration>
-				<annotationProcessorPaths>
-					<path>
-						<groupId>org.mapstruct</groupId>
-						<artifactId>mapstruct-processor</artifactId>
-						<version>1.6.3</version>
-					</path>
-					<!-- other annotation processors if any -->
-				</annotationProcessorPaths>
-			</configuration>
-		</plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<encoding>UTF-8</encoding> <!-- Codificação aqui -->
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>1.6.3</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<encoding>UTF-8</encoding> <!-- Codificação aqui -->
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>properties</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>br.com.cbd.gestor_clientes.GestorClientesApplication</mainClass>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
