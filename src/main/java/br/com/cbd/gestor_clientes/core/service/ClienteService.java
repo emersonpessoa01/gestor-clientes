@@ -117,7 +117,8 @@ public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseC
         }
     }
 
-    private boolean validarCpf(String cpf) {
+    public boolean validarCpf(String cpf) {
+        if (cpf == null || cpf.isBlank()) return false;
         cpf = cpf.replaceAll("\\D", ""); // Remove não dígitos
         if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) return false;
 
