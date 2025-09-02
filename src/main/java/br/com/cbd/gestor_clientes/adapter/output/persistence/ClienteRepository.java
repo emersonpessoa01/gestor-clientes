@@ -1,7 +1,7 @@
 package br.com.cbd.gestor_clientes.adapter.output.persistence;
 
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
-import br.com.cbd.gestor_clientes.core.port.output.ClienteRepositoryPort;
+import br.com.cbd.gestor_clientes.core.port.output.ClienteOutPort;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
+public class ClienteRepository implements ClienteOutPort {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public ClienteRepositoryAdapter(JdbcTemplate jdbcTemplate) {
+    public ClienteRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

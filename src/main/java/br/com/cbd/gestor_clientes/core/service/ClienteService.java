@@ -6,7 +6,7 @@ import br.com.cbd.gestor_clientes.core.port.input.BuscarClienteUseCase;
 import br.com.cbd.gestor_clientes.core.port.input.CriarClienteUseCase;
 import br.com.cbd.gestor_clientes.core.port.input.DeletarClienteUseCase;
 import br.com.cbd.gestor_clientes.core.port.input.ListarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.output.ClienteRepositoryPort;
+import br.com.cbd.gestor_clientes.core.port.output.ClienteOutPort;
 
 import org.springframework.stereotype.Service;
 
@@ -18,9 +18,9 @@ import java.util.Optional;
 public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseCase, DeletarClienteUseCase,
         BuscarClienteUseCase, ListarClienteUseCase {
 
-    private final ClienteRepositoryPort repository;
+    private final ClienteOutPort repository;
 
-    public ClienteService(ClienteRepositoryPort repository) {
+    public ClienteService(ClienteOutPort repository) {
         this.repository = repository;
     }
 
