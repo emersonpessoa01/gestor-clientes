@@ -1,7 +1,8 @@
-package br.com.cbd.gestor_clientes.adapter.out.persistence;
+package br.com.cbd.gestor_clientes.adapter.output.persistence;
 
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
-import br.com.cbd.gestor_clientes.core.port.out.ClienteRepositoryPort;
+import br.com.cbd.gestor_clientes.core.port.output.ClienteRepositoryPort;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
