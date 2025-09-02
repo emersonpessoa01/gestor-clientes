@@ -1,11 +1,11 @@
-package br.com.cbd.gestor_clientes.adapter.in.web;
+package br.com.cbd.gestor_clientes.adapter.input.web;
 
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
-import br.com.cbd.gestor_clientes.core.port.in.CriarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.in.AtualizarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.in.DeletarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.in.BuscarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.in.ListarClienteUseCase;
+import br.com.cbd.gestor_clientes.core.port.input.AtualizarClienteUseCase;
+import br.com.cbd.gestor_clientes.core.port.input.BuscarClienteUseCase;
+import br.com.cbd.gestor_clientes.core.port.input.CriarClienteUseCase;
+import br.com.cbd.gestor_clientes.core.port.input.DeletarClienteUseCase;
+import br.com.cbd.gestor_clientes.core.port.input.ListarClienteUseCase;
 import br.com.cbd.gestor_clientes.core.service.ClienteService;
 import br.com.cbd.gestor_clientes.mapper.ClienteMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,8 +56,8 @@ public class ClienteController {
                         @ApiResponse(responseCode = "201", description = "Cliente criado com sucesso", content = @Content(schema = @Schema(implementation = ClienteResponse.class))),
                         @ApiResponse(responseCode = "400", description = "Erro de validação: CPF inválido, email já existe, telefone inválido ou status inválido", content = @Content)
         })
-        public ResponseEntity<ClienteResponse> criar(@RequestBody ClienteRequest request) {
-                Cliente cliente = mapper.toModel(request);
+        public ResponseEntity<ClienteResponse> criar(@RequestBody ClienteRequest clienteRequest) {
+                Cliente cliente = mapper.toModel(clienteRequest);
                 Cliente salvo = criarUseCase.create(cliente);
                 return ResponseEntity.ok(mapper.toResponse(salvo));
         }

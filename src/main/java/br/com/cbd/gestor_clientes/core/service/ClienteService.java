@@ -1,12 +1,13 @@
 package br.com.cbd.gestor_clientes.core.service;
 
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
-import br.com.cbd.gestor_clientes.core.port.in.CriarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.in.AtualizarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.in.DeletarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.in.BuscarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.in.ListarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.out.ClienteRepositoryPort;
+import br.com.cbd.gestor_clientes.core.port.input.AtualizarClienteUseCase;
+import br.com.cbd.gestor_clientes.core.port.input.BuscarClienteUseCase;
+import br.com.cbd.gestor_clientes.core.port.input.CriarClienteUseCase;
+import br.com.cbd.gestor_clientes.core.port.input.DeletarClienteUseCase;
+import br.com.cbd.gestor_clientes.core.port.input.ListarClienteUseCase;
+import br.com.cbd.gestor_clientes.core.port.output.ClienteRepositoryPort;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

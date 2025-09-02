@@ -1,4 +1,4 @@
-package br.com.cbd.gestor_clientes.adapter.in.web;
+package br.com.cbd.gestor_clientes.adapter.input.web;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
