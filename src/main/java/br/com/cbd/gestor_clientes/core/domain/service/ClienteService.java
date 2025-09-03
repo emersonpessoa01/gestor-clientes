@@ -1,4 +1,4 @@
-package br.com.cbd.gestor_clientes.core.service;
+package br.com.cbd.gestor_clientes.core.domain.service;
 
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 import br.com.cbd.gestor_clientes.port.input.AtualizarClienteUseCase;
