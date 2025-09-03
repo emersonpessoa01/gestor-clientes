@@ -1,7 +1,7 @@
 package br.com.cbd.gestor_clientes.adapter.output.persistence;
 
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
-import br.com.cbd.gestor_clientes.core.port.output.ClienteOutPort;
+import br.com.cbd.gestor_clientes.core.port.output.ClienteOutputPort;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ClienteRepository implements ClienteOutPort {
+public class ClienteRepository implements ClienteOutputPort {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -23,64 +23,65 @@ public class ClienteRepository implements ClienteOutPort {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private RowMapper<Cliente> rowMapper = (rs, rowNum) -> {
-        Cliente cliente = new Cliente();
-        cliente.setId(rs.getLong("id"));
-        cliente.setNome(rs.getString("nome"));
-        cliente.setEmail(rs.getString("email"));
-        cliente.setTelefone(rs.getString("telefone"));
-        cliente.setCpf(rs.getString("cpf"));
-        cliente.setStatus(rs.getString("status"));
-        cliente.setCriadoEm(rs.getObject("criado_em", LocalDateTime.class));
-        cliente.setAtualizadoEm(rs.getObject("atualizado_em", LocalDateTime.class));
-        return cliente;
+    private RowMapper<ClienteEntity> rowMapper = (rs, rowNum) -> {
+        ClienteEntity entity = new ClienteEntity();
+        entity.setId(rs.getLong("id"));
+        entity.setNome(rs.getString("nome"));
+        entity.setEmail(rs.getString("email"));
+        entity.setTelefone(rs.getString("telefone"));
+        entity.setCpf(rs.getString("cpf"));
+        entity.setStatus(rs.getString("status"));
+        entity.setCriadoEm(rs.getObject("criado_em", LocalDateTime.class));
+        entity.setAtualizadoEm(rs.getObject("atualizado_em", LocalDateTime.class));
+        return entity;
     };
 
     @Override
     public Cliente save(Cliente cliente) {
+        ClienteEntity entity = toEntity(cliente);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO cliente (nome, email, telefone, cpf, status, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO cliente (nome, email, telefone, cpf, status) VALUES (?, ?, ?, ?, ?)",
                     new String[] { "id" });
-            ps.setString(1, cliente.getNome());
-            ps.setString(2, cliente.getEmail());
-            ps.setString(3, cliente.getTelefone());
-            ps.setString(4, cliente.getCpf());
-            ps.setString(5, cliente.getStatus());
-            ps.setObject(6, LocalDateTime.now());
-            ps.setObject(7, LocalDateTime.now());
+            ps.setString(1, entity.getNome());
+            ps.setString(2, entity.getEmail());
+            ps.setString(3, entity.getTelefone());
+            ps.setString(4, entity.getCpf());
+            ps.setString(5, entity.getStatus());
             return ps;
         }, keyHolder);
         Long id = keyHolder.getKey().longValue();
-        cliente.setId(id);
+        entity.setId(id);
 
         String selectSql = "SELECT * FROM cliente WHERE id = ?";
-        Cliente savedCliente = jdbcTemplate.queryForObject(selectSql, rowMapper, id);
-        return savedCliente != null ? savedCliente : cliente;
+        ClienteEntity savedEntity = jdbcTemplate.queryForObject(selectSql, rowMapper, id);
+        return toDomain(savedEntity);
     }
 
     @Override
     public Optional<Cliente> findById(Long id) {
         String sql = "SELECT * FROM cliente WHERE id = ?";
-        List<Cliente> clientes = jdbcTemplate.query(sql, rowMapper, id);
-        return clientes.isEmpty() ? Optional.empty() : Optional.of(clientes.get(0));
+        List<ClienteEntity> entities = jdbcTemplate.query(sql, rowMapper, id);
+        return entities.isEmpty() ? Optional.empty() : Optional.of(toDomain(entities.get(0)));
     }
 
     @Override
     public List<Cliente> findAll() {
-        String sql = "SELECT * FROM cliente ORDER BY id ASC"; // Ordenação ascendente por ID
-        return jdbcTemplate.query(sql, rowMapper);
+        String sql = "SELECT * FROM cliente";
+        List<ClienteEntity> entities = jdbcTemplate.query(sql, rowMapper);
+        return entities.stream().map(this::toDomain).toList();
     }
 
     @Override
     public Cliente update(Cliente cliente) {
-        String sql = "UPDATE cliente SET nome = ?, email = ?, telefone = ?, cpf = ?, status = ?, atualizado_em = ? WHERE id = ?";
-        jdbcTemplate.update(sql, cliente.getNome(), cliente.getEmail(), cliente.getTelefone(), cliente.getCpf(),
-                cliente.getStatus(), LocalDateTime.now(), cliente.getId());
+        ClienteEntity entity = toEntity(cliente);
+        String sql = "UPDATE cliente SET nome = ?, email = ?, telefone = ?, cpf = ?, status = ? WHERE id = ?";
+        jdbcTemplate.update(sql, entity.getNome(), entity.getEmail(), entity.getTelefone(), entity.getCpf(),
+                entity.getStatus(), entity.getId());
         String selectSql = "SELECT * FROM cliente WHERE id = ?";
-        Cliente updatedCliente = jdbcTemplate.queryForObject(selectSql, rowMapper, cliente.getId());
-        return updatedCliente != null ? updatedCliente : cliente;
+        ClienteEntity updatedEntity = jdbcTemplate.queryForObject(selectSql, rowMapper, entity.getId());
+        return toDomain(updatedEntity);
     }
 
     @Override
@@ -101,5 +102,31 @@ public class ClienteRepository implements ClienteOutPort {
         String sql = "SELECT COUNT(*) FROM cliente WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
         return count != null && count > 0;
+    }
+
+    private ClienteEntity toEntity(Cliente cliente) {
+        ClienteEntity entity = new ClienteEntity();
+        entity.setId(cliente.getId());
+        entity.setNome(cliente.getNome());
+        entity.setEmail(cliente.getEmail());
+        entity.setTelefone(cliente.getTelefone());
+        entity.setCpf(cliente.getCpf());
+        entity.setStatus(cliente.getStatus());
+        entity.setCriadoEm(cliente.getCriadoEm());
+        entity.setAtualizadoEm(cliente.getAtualizadoEm());
+        return entity;
+    }
+
+    private Cliente toDomain(ClienteEntity entity) {
+        Cliente cliente = new Cliente();
+        cliente.setId(entity.getId());
+        cliente.setNome(entity.getNome());
+        cliente.setEmail(entity.getEmail());
+        cliente.setTelefone(entity.getTelefone());
+        cliente.setCpf(entity.getCpf());
+        cliente.setStatus(entity.getStatus());
+        cliente.setCriadoEm(entity.getCriadoEm());
+        cliente.setAtualizadoEm(entity.getAtualizadoEm());
+        return cliente;
     }
 }
