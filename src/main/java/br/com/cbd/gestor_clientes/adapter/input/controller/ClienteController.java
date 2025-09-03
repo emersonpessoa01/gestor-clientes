@@ -9,7 +9,7 @@ import br.com.cbd.gestor_clientes.port.input.AtualizarClienteUseCase;
 import br.com.cbd.gestor_clientes.port.input.DeletarClienteUseCase;
 import br.com.cbd.gestor_clientes.port.input.BuscarClienteUseCase;
 import br.com.cbd.gestor_clientes.port.input.ListarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.service.ClienteService;
+import br.com.cbd.gestor_clientes.core.domain.service.ClienteService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
