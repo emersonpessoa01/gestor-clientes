@@ -2,13 +2,13 @@ package br.com.cbd.gestor_clientes.adapter.input.controller;
 
 import br.com.cbd.gestor_clientes.adapter.input.request.ClienteRequest;
 import br.com.cbd.gestor_clientes.adapter.input.request.ClienteResponse;
-import br.com.cbd.gestor_clientes.adapter.mapper.ClienteMapper;
+import br.com.cbd.gestor_clientes.adapter.input.mapper.ClienteMapper;
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
-import br.com.cbd.gestor_clientes.core.port.input.CriarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.input.AtualizarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.input.DeletarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.input.BuscarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.input.ListarClienteUseCase;
+import br.com.cbd.gestor_clientes.port.input.CriarClienteUseCase;
+import br.com.cbd.gestor_clientes.port.input.AtualizarClienteUseCase;
+import br.com.cbd.gestor_clientes.port.input.DeletarClienteUseCase;
+import br.com.cbd.gestor_clientes.port.input.BuscarClienteUseCase;
+import br.com.cbd.gestor_clientes.port.input.ListarClienteUseCase;
 import br.com.cbd.gestor_clientes.core.service.ClienteService;
 
 import org.springframework.http.ResponseEntity;

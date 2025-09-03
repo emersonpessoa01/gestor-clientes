@@ -1,4 +1,4 @@
-package br.com.cbd.gestor_clientes.adapter.mapper;
+package br.com.cbd.gestor_clientes.adapter.input.mapper;
 
 import java.util.List;
 

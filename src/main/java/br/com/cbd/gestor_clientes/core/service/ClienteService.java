@@ -1,12 +1,12 @@
 package br.com.cbd.gestor_clientes.core.service;
 
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
-import br.com.cbd.gestor_clientes.core.port.input.AtualizarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.input.BuscarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.input.CriarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.input.DeletarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.input.ListarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.port.output.ClienteOutPort;
+import br.com.cbd.gestor_clientes.port.input.AtualizarClienteUseCase;
+import br.com.cbd.gestor_clientes.port.input.BuscarClienteUseCase;
+import br.com.cbd.gestor_clientes.port.input.CriarClienteUseCase;
+import br.com.cbd.gestor_clientes.port.input.DeletarClienteUseCase;
+import br.com.cbd.gestor_clientes.port.input.ListarClienteUseCase;
+import br.com.cbd.gestor_clientes.port.output.ClienteOutputPort;
 
 import org.springframework.stereotype.Service;
 
@@ -18,9 +18,9 @@ import java.util.Optional;
 public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseCase, DeletarClienteUseCase,
         BuscarClienteUseCase, ListarClienteUseCase {
 
-    private final ClienteOutPort repository;
+    private final ClienteOutputPort repository;
 
-    public ClienteService(ClienteOutPort repository) {
+    public ClienteService(ClienteOutputPort repository) {
         this.repository = repository;
     }
 
