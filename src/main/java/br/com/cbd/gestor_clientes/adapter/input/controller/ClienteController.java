@@ -3,14 +3,15 @@ package br.com.cbd.gestor_clientes.adapter.input.controller;
 import br.com.cbd.gestor_clientes.adapter.input.request.ClienteRequest;
 import br.com.cbd.gestor_clientes.adapter.input.request.ClienteResponse;
 import br.com.cbd.gestor_clientes.adapter.input.mapper.ClienteMapper;
-import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
-import br.com.cbd.gestor_clientes.port.input.CriarClienteUseCase;
-import br.com.cbd.gestor_clientes.port.input.AtualizarClienteUseCase;
-import br.com.cbd.gestor_clientes.port.input.DeletarClienteUseCase;
-import br.com.cbd.gestor_clientes.port.input.BuscarClienteUseCase;
-import br.com.cbd.gestor_clientes.port.input.ListarClienteUseCase;
-import br.com.cbd.gestor_clientes.core.domain.service.ClienteService;
+import br.com.cbd.gestor_clientes.core.model.Cliente;
+import br.com.cbd.gestor_clientes.application.port.input.CriarClienteUseCase;
+import br.com.cbd.gestor_clientes.application.port.input.AtualizarClienteUseCase;
+import br.com.cbd.gestor_clientes.application.port.input.DeletarClienteUseCase;
+import br.com.cbd.gestor_clientes.application.port.input.BuscarClienteUseCase;
+import br.com.cbd.gestor_clientes.application.port.input.ListarClienteUseCase;
 
+
+import br.com.cbd.gestor_clientes.usecase.ClienteUseCaseImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,18 +27,19 @@ public class ClienteController implements SwaggerClienteController {
         private final BuscarClienteUseCase buscarUseCase;
         private final ListarClienteUseCase listarUseCase;
         private final ClienteMapper mapper;
-        private final ClienteService clienteService;
+        private final ClienteUseCaseImpl clienteUseCase;
 
         public ClienteController(CriarClienteUseCase criarUseCase, AtualizarClienteUseCase atualizarUseCase,
-                        DeletarClienteUseCase deletarUseCase, BuscarClienteUseCase buscarUseCase,
-                        ListarClienteUseCase listarUseCase, ClienteMapper mapper, ClienteService clienteService) {
+                                 DeletarClienteUseCase deletarUseCase, BuscarClienteUseCase buscarUseCase,
+                                 ListarClienteUseCase listarUseCase, ClienteMapper mapper, ClienteUseCaseImpl clienteUseCase) {
                 this.criarUseCase = criarUseCase;
                 this.atualizarUseCase = atualizarUseCase;
                 this.deletarUseCase = deletarUseCase;
                 this.buscarUseCase = buscarUseCase;
                 this.listarUseCase = listarUseCase;
                 this.mapper = mapper;
-                this.clienteService = clienteService;
+                this.clienteUseCase = clienteUseCase;
+
         }
 
         @PostMapping
@@ -80,7 +82,7 @@ public class ClienteController implements SwaggerClienteController {
                 if (cpf == null || cpf.isEmpty()) {
                         return ResponseEntity.badRequest().body("CPF não pode ser vazio.");
                 }
-                boolean valido = clienteService.validarCpf(cpf);
+                boolean valido = clienteUseCase.validarCpf(cpf);
                 return ResponseEntity.ok(valido ? "CPF válido." : "CPF inválido.");
         }
 }
