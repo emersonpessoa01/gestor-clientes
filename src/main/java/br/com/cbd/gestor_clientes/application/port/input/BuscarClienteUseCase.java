@@ -1,6 +1,6 @@
-package br.com.cbd.gestor_clientes.port.input;
+package br.com.cbd.gestor_clientes.application.port.input;
 
-import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
+import br.com.cbd.gestor_clientes.core.model.Cliente;
 
 import java.util.Optional;
 
