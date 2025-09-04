@@ -1,4 +1,4 @@
-package br.com.cbd.gestor_clientes.port.output;
+package br.com.cbd.gestor_clientes.application.port.output;
 
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 
