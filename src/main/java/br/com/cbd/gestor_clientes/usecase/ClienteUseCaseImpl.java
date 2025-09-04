@@ -1,26 +1,26 @@
-package br.com.cbd.gestor_clientes.core.domain.service;
+package br.com.cbd.gestor_clientes.usecase;
 
-import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
-import br.com.cbd.gestor_clientes.port.input.AtualizarClienteUseCase;
-import br.com.cbd.gestor_clientes.port.input.BuscarClienteUseCase;
-import br.com.cbd.gestor_clientes.port.input.CriarClienteUseCase;
-import br.com.cbd.gestor_clientes.port.input.DeletarClienteUseCase;
-import br.com.cbd.gestor_clientes.port.input.ListarClienteUseCase;
-import br.com.cbd.gestor_clientes.port.output.ClienteOutputPort;
-
+import br.com.cbd.gestor_clientes.core.model.Cliente;
+import br.com.cbd.gestor_clientes.application.port.input.AtualizarClienteUseCase;
+import br.com.cbd.gestor_clientes.application.port.input.BuscarClienteUseCase;
+import br.com.cbd.gestor_clientes.application.port.input.CriarClienteUseCase;
+import br.com.cbd.gestor_clientes.application.port.input.DeletarClienteUseCase;
+import br.com.cbd.gestor_clientes.application.port.input.ListarClienteUseCase;
+import br.com.cbd.gestor_clientes.application.port.output.ClienteOutputPort;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ClienteService implements CriarClienteUseCase, AtualizarClienteUseCase, DeletarClienteUseCase,
+public class ClienteUseCaseImpl implements CriarClienteUseCase, AtualizarClienteUseCase, DeletarClienteUseCase,
         BuscarClienteUseCase, ListarClienteUseCase {
 
     private final ClienteOutputPort repository;
 
-    public ClienteService(ClienteOutputPort repository) {
+    public ClienteUseCaseImpl(ClienteOutputPort repository) {
         this.repository = repository;
     }
 
