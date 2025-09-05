@@ -129,7 +129,7 @@ mvn spring-boot:run
 
 - API: http://localhost:8081
 - Swagger UI: http://localhost:8081/swagger-ui/index.html
-- Validador CPF: http://localhost:8081/validate-cpf.html
+- Validador CPF: http://localhost:8081/cpf-validator.html
 
 📦 Schema SQL src/main/resources/schema.sql:
 
