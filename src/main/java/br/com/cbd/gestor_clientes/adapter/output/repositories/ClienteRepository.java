@@ -70,7 +70,7 @@ public class ClienteRepository implements ClienteOutputPort {
 
     @Override
     public List<Cliente> findAll() {
-        String sql = "SELECT * FROM cliente";
+        String sql = "SELECT * FROM cliente ORDER BY id ASC";
         List<ClienteEntity> entities = jdbcTemplate.query(sql, rowMapper);
         return entities.stream().map(this::toDomain).toList();
     }
@@ -78,9 +78,9 @@ public class ClienteRepository implements ClienteOutputPort {
     @Override
     public Cliente update(Cliente cliente) {
         ClienteEntity entity = toEntity(cliente);
-        String sql = "UPDATE cliente SET nome = ?, email = ?, telefone = ?, cpf = ?, status = ? WHERE id = ?";
+        String sql = "UPDATE cliente SET nome = ?, email = ?, telefone = ?, cpf = ?, status = ?, atualizado_em= ? WHERE id = ?";
         jdbcTemplate.update(sql, entity.getNome(), entity.getEmail(), entity.getTelefone(), entity.getCpf(),
-                entity.getStatus(), entity.getId());
+                entity.getStatus(),entity.getAtualizadoEm(), entity.getId());
         String selectSql = "SELECT * FROM cliente WHERE id = ?";
         ClienteEntity updatedEntity = jdbcTemplate.queryForObject(selectSql, rowMapper, entity.getId());
         return toDomain(updatedEntity);
