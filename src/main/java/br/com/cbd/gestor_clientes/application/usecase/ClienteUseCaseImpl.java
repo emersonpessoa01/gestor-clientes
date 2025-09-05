@@ -1,4 +1,4 @@
-package br.com.cbd.gestor_clientes.usecase;
+package br.com.cbd.gestor_clientes.application.usecase;
 
 import br.com.cbd.gestor_clientes.application.port.input.ClienteInputPort;
 import br.com.cbd.gestor_clientes.application.port.output.ClienteOutputPort;
