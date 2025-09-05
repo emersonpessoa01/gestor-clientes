@@ -1,4 +1,4 @@
-package br.com.cbd.gestor_clientes.adapter.input.request;
+package br.com.cbd.gestor_clientes.adapter.input.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
