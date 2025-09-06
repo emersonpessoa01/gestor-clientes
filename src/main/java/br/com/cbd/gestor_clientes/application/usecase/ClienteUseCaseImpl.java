@@ -1,5 +1,6 @@
 package br.com.cbd.gestor_clientes.application.usecase;
 
+import br.com.cbd.gestor_clientes.adapter.output.repositories.ClienteRepository;
 import br.com.cbd.gestor_clientes.application.port.input.ClienteInputPort;
 import br.com.cbd.gestor_clientes.application.port.output.ClienteOutputPort;
 import br.com.cbd.gestor_clientes.core.model.Cliente;
@@ -13,9 +14,11 @@ import java.util.Optional;
 public class ClienteUseCaseImpl implements ClienteInputPort {
 
     private final ClienteOutputPort repository;
+    private final ClienteRepository clienteRepository;
 
-    public ClienteUseCaseImpl(ClienteOutputPort repository) {
+    public ClienteUseCaseImpl(ClienteOutputPort repository, ClienteRepository clienteRepository) {
         this.repository = repository;
+        this.clienteRepository = clienteRepository;
     }
 
     @Override
@@ -132,5 +135,8 @@ public class ClienteUseCaseImpl implements ClienteInputPort {
         if (telefone == null || telefone.isBlank())
             return true; // Opcional
         return telefone.matches("^\\+\\d{2}\\s?\\(?\\d{2}\\)?\\s?\\d{4,5}-?\\d{4}$");
+    }
+    public int contarClientesAtivos(){
+        return clienteRepository.contarClientesAtivos();
     }
 }
