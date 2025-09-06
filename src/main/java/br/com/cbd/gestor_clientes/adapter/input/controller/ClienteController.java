@@ -60,4 +60,9 @@ public class ClienteController implements SwaggerClienteController {
                 boolean valido = inputPort.validarCpf(cpf);
                 return ResponseEntity.ok(valido ? "CPF válido." : "CPF inválido.");
         }
+        @GetMapping("/ativos/count")
+        public ResponseEntity<Integer> contarAtivos(){
+                int totalAtivos = inputPort.contarClientesAtivos();
+                return ResponseEntity.ok(totalAtivos);
+        }
 }
