@@ -145,6 +145,22 @@ CREATE TABLE cliente (
     atualizado_em TIMESTAMP NOT NULL
 );
 ```
+📦 Schema SQL src/main/resources/function_contar_clientes_ativos.sql:
+
+```sql
+-- Função para contar clientes ativos
+CREATE OR REPLACE FUNCTION public.contar_clientes_ativos()
+RETURNS INTEGER AS $$
+DECLARE
+    total INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO total
+    FROM cliente
+    WHERE status = 'ATIVO';
+    RETURN total;
+END;
+$$ LANGUAGE plpgsql;
+```
 
 Aplique no banco gestor_clientes antes de executar.
 
