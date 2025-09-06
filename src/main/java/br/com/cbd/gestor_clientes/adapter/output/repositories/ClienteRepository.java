@@ -131,4 +131,9 @@ public class ClienteRepository implements ClienteOutputPort {
         cliente.setAtualizadoEm(entity.getAtualizadoEm());
         return cliente;
     }
+    public int contarClientesAtivos() {
+        String sql = "SELECT contar_clientes_ativos()";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
+
 }
