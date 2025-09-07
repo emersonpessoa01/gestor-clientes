@@ -12,8 +12,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.cbd.gestor_clientes.adapter.input.dto.ClienteRequest;
-import br.com.cbd.gestor_clientes.adapter.input.dto.ClienteResponse;
+import br.com.cbd.gestor_clientes.adapter.input.request.ClienteRequest;
+import br.com.cbd.gestor_clientes.adapter.input.request.ClienteResponse;
 
 import java.util.List;
 

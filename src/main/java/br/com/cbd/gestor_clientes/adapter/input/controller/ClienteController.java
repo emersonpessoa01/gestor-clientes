@@ -1,10 +1,10 @@
 package br.com.cbd.gestor_clientes.adapter.input.controller;
 
-import br.com.cbd.gestor_clientes.application.port.input.ClienteInputPort;
+import br.com.cbd.gestor_clientes.port.input.ClienteInputPort;
 import br.com.cbd.gestor_clientes.adapter.input.mapper.ClienteMapper;
-import br.com.cbd.gestor_clientes.adapter.input.dto.ClienteRequest;
-import br.com.cbd.gestor_clientes.adapter.input.dto.ClienteResponse;
-import br.com.cbd.gestor_clientes.core.model.Cliente;
+import br.com.cbd.gestor_clientes.adapter.input.request.ClienteRequest;
+import br.com.cbd.gestor_clientes.adapter.input.request.ClienteResponse;
+import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
