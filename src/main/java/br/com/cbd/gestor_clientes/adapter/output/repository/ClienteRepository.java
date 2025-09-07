@@ -1,10 +1,10 @@
-package br.com.cbd.gestor_clientes.adapter.output.repositories;
+package br.com.cbd.gestor_clientes.adapter.output.repository;
 
-import br.com.cbd.gestor_clientes.adapter.output.entities.ClienteEntity;
-import br.com.cbd.gestor_clientes.core.model.Cliente;
+import br.com.cbd.gestor_clientes.adapter.output.entity.ClienteEntity;
+import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 
 
-import br.com.cbd.gestor_clientes.application.port.output.ClienteOutputPort;
+import br.com.cbd.gestor_clientes.port.output.ClienteOutputPort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
