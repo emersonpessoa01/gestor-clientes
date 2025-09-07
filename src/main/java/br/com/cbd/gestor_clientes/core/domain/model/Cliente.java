@@ -1,4 +1,4 @@
-package br.com.cbd.gestor_clientes.core.model;
+package br.com.cbd.gestor_clientes.core.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

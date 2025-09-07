@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 import br.com.cbd.gestor_clientes.adapter.input.request.ClienteRequest;
 import br.com.cbd.gestor_clientes.adapter.input.request.ClienteResponse;
-import br.com.cbd.gestor_clientes.core.model.Cliente;
+import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 
 @Mapper(componentModel = "spring")
 public interface ClienteMapper {

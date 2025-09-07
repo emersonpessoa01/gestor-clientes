@@ -77,4 +77,16 @@ public interface SwaggerClienteController {
             description = "Verifica se um CPF é válido em formato."
     )
     ResponseEntity<String> validateCpf(@Parameter(description = "CPF a validar(ex: 111.444.777-35)", required = true, example = "111.444.777-35") @RequestParam String cpf);
+
+    @Operation(
+            summary = "Contar clientes ativos",
+            description = "Retorna a quantidade de clientes com status ATIVO."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Quantidade de clientes ativos retornada com sucesso",
+                    content = @Content(schema = @Schema(implementation = Integer.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao tentar contar clientes ativos", content = @Content)
+    })
+    ResponseEntity<Integer> contarAtivos();
+
 }

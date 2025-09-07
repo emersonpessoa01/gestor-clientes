@@ -129,7 +129,7 @@ mvn spring-boot:run
 
 - API: http://localhost:8081
 - Swagger UI: http://localhost:8081/swagger-ui/index.html
-- Validador CPF: http://localhost:8081/validate-cpf.html
+- Validador CPF: http://localhost:8081/cpf-validator.html
 
 📦 Schema SQL src/main/resources/schema.sql:
 
@@ -145,17 +145,33 @@ CREATE TABLE cliente (
     atualizado_em TIMESTAMP NOT NULL
 );
 ```
+📦 Schema SQL src/main/resources/function_contar_clientes_ativos.sql:
+
+```sql
+-- Função para contar clientes ativos
+CREATE OR REPLACE FUNCTION public.contar_clientes_ativos()
+RETURNS INTEGER AS $$
+DECLARE
+    total INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO total
+    FROM cliente
+    WHERE status = 'ATIVO';
+    RETURN total;
+END;
+$$ LANGUAGE plpgsql;
+```
 
 Aplique no banco gestor_clientes antes de executar.
 
 📦 Importação da coleção de testes no Insomnia:
 
-[Download da coleção](./api-collections/Insomnia_2025-08-22.yaml)
+[Download da coleção](api-collections/Insomnia_2025-09-05.yaml)
 
 path:
 
 ```
-./api-collections/Insomnia_2025-08-22.yaml
+./api-collections/Insomnia_2025-09-05.yaml
 
 ```
 
