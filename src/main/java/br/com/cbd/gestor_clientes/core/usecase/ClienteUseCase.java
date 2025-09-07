@@ -1,5 +1,7 @@
 package br.com.cbd.gestor_clientes.core.usecase;
 
+import br.com.cbd.gestor_clientes.adapter.input.exception.BusinessException;
+import br.com.cbd.gestor_clientes.adapter.input.exception.NotFoundException;
 import br.com.cbd.gestor_clientes.adapter.output.repository.ClienteRepository;
 import br.com.cbd.gestor_clientes.port.input.ClienteInputPort;
 import br.com.cbd.gestor_clientes.port.output.ClienteOutputPort;
@@ -24,10 +26,10 @@ public class ClienteUseCase implements ClienteInputPort {
         validarClienteParaCriacao(cliente);
 
         if (repository.existsByCpf(cliente.getCpf())) {
-            throw new IllegalArgumentException("CPF já cadastrado.");
+            throw new NotFoundException("CPF já cadastrado.");
         }
         if (repository.existsByEmail(cliente.getEmail())) {
-            throw new IllegalArgumentException("Email já cadastrado.");
+            throw new NotFoundException("Email já cadastrado.");
         }
 
         cliente.setCriadoEm(LocalDateTime.now());
@@ -39,13 +41,13 @@ public class ClienteUseCase implements ClienteInputPort {
     public Cliente update(Long id, Cliente cliente) {
         Optional<Cliente> clienteExistente = repository.findById(id);
         if (clienteExistente.isEmpty()) {
-            throw new IllegalArgumentException("Cliente não encontrado.");
+            throw new NotFoundException("Cliente não encontrado.");
         }
 
         validarClienteParaAtualizacao(cliente, clienteExistente.get());
 
         if (!cliente.getCpf().equals(clienteExistente.get().getCpf())) {
-            throw new IllegalArgumentException("Não é permitido alterar o CPF.");
+            throw new BusinessException("Não é permitido alterar o CPF.");
         }
 
         cliente.setId(id);
@@ -59,7 +61,7 @@ public class ClienteUseCase implements ClienteInputPort {
     public void delete(Long id) {
         Optional<Cliente> cliente = repository.findById(id);
         if (cliente.isEmpty()) {
-            throw new IllegalArgumentException("Cliente não encontrado.");
+            throw new NotFoundException("Cliente não encontrado.");
         }
         Cliente clienteAtualizado = cliente.get();
         clienteAtualizado.setStatus("INATIVO");
@@ -71,7 +73,7 @@ public class ClienteUseCase implements ClienteInputPort {
     public Optional<Cliente> findById(Long id) {
         Optional<Cliente> cliente = repository.findById(id);
         if (cliente.isEmpty()) {
-            throw new IllegalArgumentException("Cliente com ID " + id + " não encontrado.");
+            throw new NotFoundException("Cliente com ID " + id + " não encontrado.");
         }
         return cliente;
     }
@@ -106,23 +108,23 @@ public class ClienteUseCase implements ClienteInputPort {
 
     private void validarClienteParaCriacao(Cliente cliente) {
         if (cliente.getNome() == null || cliente.getNome().length() < 3) {
-            throw new IllegalArgumentException("Nome é obrigatório e deve ter pelo menos 3 caracteres.");
+            throw new BusinessException("Nome é obrigatório e deve ter pelo menos 3 caracteres.");
         }
         if (cliente.getEmail() == null || cliente.getEmail().trim().isEmpty()) {
-            throw new IllegalArgumentException("Email é obrigatório.");
+            throw new BusinessException("Email é obrigatório.");
         }
         if (!cliente.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-            throw new IllegalArgumentException("Email inválido: " + cliente.getEmail());
+            throw new BusinessException("Email inválido: " + cliente.getEmail());
         }
         if (cliente.getStatus() == null
                 || !List.of("ATIVO", "INATIVO", "PROSPECT").contains(cliente.getStatus().toUpperCase())) {
-            throw new IllegalArgumentException("Status deve ser ATIVO, INATIVO ou PROSPECT.");
+            throw new BusinessException("Status deve ser ATIVO, INATIVO ou PROSPECT.");
         }
         if (cliente.getCpf() != null && !validarCpf(cliente.getCpf())) {
-            throw new IllegalArgumentException("CPF inválido.");
+            throw new BusinessException("CPF inválido.");
         }
         if (cliente.getTelefone() != null && !validarTelefone(cliente.getTelefone())) {
-            throw new IllegalArgumentException("Telefone inválido (formato DDI+DDD).");
+            throw new BusinessException("Telefone inválido (formato DDI+DDD).");
         }
     }
 
