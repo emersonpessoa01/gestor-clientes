@@ -1,24 +1,22 @@
-package br.com.cbd.gestor_clientes.application.usecase;
+package br.com.cbd.gestor_clientes.core.usecase;
 
-import br.com.cbd.gestor_clientes.adapter.output.repositories.ClienteRepository;
-import br.com.cbd.gestor_clientes.application.port.input.ClienteInputPort;
-import br.com.cbd.gestor_clientes.application.port.output.ClienteOutputPort;
-import br.com.cbd.gestor_clientes.core.model.Cliente;
-import org.springframework.stereotype.Service;
-
+import br.com.cbd.gestor_clientes.adapter.output.repository.ClienteRepository;
+import br.com.cbd.gestor_clientes.port.input.ClienteInputPort;
+import br.com.cbd.gestor_clientes.port.output.ClienteOutputPort;
+import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class ClienteUseCaseImpl implements ClienteInputPort {
+public class ClienteUseCase implements ClienteInputPort {
 
     private final ClienteOutputPort repository;
     private final ClienteRepository clienteRepository;
 
-    public ClienteUseCaseImpl(ClienteOutputPort repository, ClienteRepository clienteRepository) {
+    public ClienteUseCase(ClienteOutputPort repository, ClienteRepository clienteRepository) {
         this.repository = repository;
         this.clienteRepository = clienteRepository;
+
     }
 
     @Override
@@ -85,6 +83,8 @@ public class ClienteUseCaseImpl implements ClienteInputPort {
 
     @Override
     public boolean validarCpf(String cpf) {
+        int sum1 = 0;
+        int sum2 = 0;
         if (cpf == null || cpf.isBlank())
             return false;
         cpf = cpf.replaceAll("\\D", "");
@@ -92,7 +92,6 @@ public class ClienteUseCaseImpl implements ClienteInputPort {
             return false;
 
         int[] digits = cpf.chars().map(c -> c - '0').toArray();
-        int sum1 = 0, sum2 = 0;
         for (int i = 0; i < 9; i++) {
             sum1 += digits[i] * (10 - i);
             sum2 += digits[i] * (11 - i);
