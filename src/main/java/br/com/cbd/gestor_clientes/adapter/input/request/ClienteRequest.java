@@ -1,4 +1,4 @@
-package br.com.cbd.gestor_clientes.adapter.input.dto;
+package br.com.cbd.gestor_clientes.adapter.input.request;
 
 public class ClienteRequest {
     private String nome;
