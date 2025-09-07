@@ -1,4 +1,4 @@
-package br.com.cbd.gestor_clientes.adapter.output.entities;
+package br.com.cbd.gestor_clientes.adapter.output.entity;
 
 import java.time.LocalDateTime;
 
