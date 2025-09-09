@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE pr_insert_cliente(
+create or replace procedure pr_insert_cliente(
     IN p_nome     TEXT,
     IN p_email    TEXT,
     IN p_telefone TEXT,
@@ -23,3 +23,5 @@ CALL pr_insert_cliente(
 'ATIVO',
 o_id := NULL
 );
+
+
