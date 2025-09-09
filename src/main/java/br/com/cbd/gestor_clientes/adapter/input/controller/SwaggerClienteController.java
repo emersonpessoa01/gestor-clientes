@@ -89,4 +89,16 @@ public interface SwaggerClienteController {
     })
     ResponseEntity<Integer> contarAtivos();
 
+    @Operation(
+            summary = "Buscar cliente por CPF",
+            description = "Retorna so detalhes de um cliente específico pelo CPF."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado", content = @Content(schema = @Schema(implementation = ClienteResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado", content = @Content)
+    })
+    ResponseEntity<ClienteResponse> buscarPorCpf(
+            @Parameter(description = "CPF do cliente", required = true, example = "111.444.777-35")
+            @PathVariable String cpf);
+
 }

@@ -1,5 +1,6 @@
 package br.com.cbd.gestor_clientes.adapter.input.controller;
 
+import br.com.cbd.gestor_clientes.adapter.input.exception.NotFoundException;
 import br.com.cbd.gestor_clientes.port.input.ClienteInputPort;
 import br.com.cbd.gestor_clientes.adapter.input.mapper.ClienteMapper;
 import br.com.cbd.gestor_clientes.adapter.input.request.ClienteRequest;
@@ -44,7 +45,7 @@ public class ClienteController implements SwaggerClienteController {
 
         @GetMapping("/{id}")
         public ResponseEntity<ClienteResponse> buscar(@PathVariable Long id) {
-                Cliente cliente = inputPort.findById(id).orElseThrow(() -> new IllegalArgumentException(
+                Cliente cliente = inputPort.findById(id).orElseThrow(() -> new NotFoundException(
                         "Cliente com ID " + id + " não encontrado."));
                 return ResponseEntity.ok(mapper.toResponse(cliente));
         }
