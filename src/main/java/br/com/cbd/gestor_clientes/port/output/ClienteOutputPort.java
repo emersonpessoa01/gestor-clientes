@@ -19,4 +19,6 @@ public interface ClienteOutputPort {
     boolean existsByCpf(String cpf); // Para validar duplicidade de CPF
 
     boolean existsByEmail(String email); // Para validar duplicidade de Email
+
+    Optional<Cliente> findByCpf(String cpf);
 }

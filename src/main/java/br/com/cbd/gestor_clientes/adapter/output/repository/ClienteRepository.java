@@ -45,7 +45,7 @@ public class ClienteRepository implements ClienteOutputPort {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO cliente (nome, email, telefone, cpf, status) VALUES (?, ?, ?, ?, ?)",
-                    new String[] { "id" });
+                    new String[]{"id"});
             ps.setString(1, entity.getNome());
             ps.setString(2, entity.getEmail());
             ps.setString(3, entity.getTelefone());
@@ -80,7 +80,7 @@ public class ClienteRepository implements ClienteOutputPort {
         ClienteEntity entity = toEntity(cliente);
         String sql = "UPDATE cliente SET nome = ?, email = ?, telefone = ?, cpf = ?, status = ?, atualizado_em= ? WHERE id = ?";
         jdbcTemplate.update(sql, entity.getNome(), entity.getEmail(), entity.getTelefone(), entity.getCpf(),
-                entity.getStatus(),entity.getAtualizadoEm(), entity.getId());
+                entity.getStatus(), entity.getAtualizadoEm(), entity.getId());
         String selectSql = "SELECT * FROM cliente WHERE id = ?";
         ClienteEntity updatedEntity = jdbcTemplate.queryForObject(selectSql, rowMapper, entity.getId());
         return toDomain(updatedEntity);
@@ -104,6 +104,13 @@ public class ClienteRepository implements ClienteOutputPort {
         String sql = "SELECT COUNT(*) FROM cliente WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
         return count != null && count > 0;
+    }
+
+    @Override
+    public Optional<Cliente> findByCpf(String cpf) {
+        String sql = "SELECT * FROM cliente WHERE cpf = ?";
+        List<ClienteEntity> entities = jdbcTemplate.query(sql, rowMapper, cpf);
+        return entities.isEmpty() ? Optional.empty() : Optional.of(toDomain(entities.get(0)));
     }
 
     private ClienteEntity toEntity(Cliente cliente) {
@@ -131,9 +138,11 @@ public class ClienteRepository implements ClienteOutputPort {
         cliente.setAtualizadoEm(entity.getAtualizadoEm());
         return cliente;
     }
+
     public int contarClientesAtivos() {
         String sql = "SELECT contar_clientes_ativos()";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
+
 
 }
