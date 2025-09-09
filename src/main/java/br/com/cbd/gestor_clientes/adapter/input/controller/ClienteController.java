@@ -65,4 +65,11 @@ public class ClienteController implements SwaggerClienteController {
                 int totalAtivos = inputPort.contarClientesAtivos();
                 return ResponseEntity.ok(totalAtivos);
         }
+        @GetMapping("/cpf/{cpf}")
+        public ResponseEntity<ClienteResponse> buscarPorCpf(@PathVariable String cpf) {
+                return inputPort.buscarPorCpf(cpf)
+                        .map(cliente -> ResponseEntity.ok(mapper.toResponse(cliente)))
+                        .orElse(ResponseEntity.notFound().build());
+        }
+
 }
