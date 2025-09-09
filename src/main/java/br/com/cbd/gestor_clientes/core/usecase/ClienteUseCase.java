@@ -21,7 +21,7 @@ public class ClienteUseCase implements ClienteInputPort {
 
     }
 
-    @Override
+
     public Cliente create(Cliente cliente) {
         validarClienteParaCriacao(cliente);
 
@@ -37,7 +37,7 @@ public class ClienteUseCase implements ClienteInputPort {
         return repository.save(cliente);
     }
 
-    @Override
+
     public Cliente update(Long id, Cliente cliente) {
         Optional<Cliente> clienteExistente = repository.findById(id);
         if (clienteExistente.isEmpty()) {
@@ -57,7 +57,7 @@ public class ClienteUseCase implements ClienteInputPort {
         return repository.update(cliente);
     }
 
-    @Override
+
     public void delete(Long id) {
         Optional<Cliente> cliente = repository.findById(id);
         if (cliente.isEmpty()) {
@@ -69,7 +69,7 @@ public class ClienteUseCase implements ClienteInputPort {
         repository.update(clienteAtualizado);
     }
 
-    @Override
+
     public Optional<Cliente> findById(Long id) {
         Optional<Cliente> cliente = repository.findById(id);
         if (cliente.isEmpty()) {
@@ -78,12 +78,12 @@ public class ClienteUseCase implements ClienteInputPort {
         return cliente;
     }
 
-    @Override
+
     public List<Cliente> findAll() {
         return repository.findAll();
     }
 
-    @Override
+
     public boolean validarCpf(String cpf) {
         int sum1 = 0;
         int sum2 = 0;
@@ -139,5 +139,10 @@ public class ClienteUseCase implements ClienteInputPort {
     }
     public int contarClientesAtivos(){
         return clienteRepository.contarClientesAtivos();
+    }
+
+    @Override
+    public Optional<Cliente> buscarPorCpf(String cpf) {
+        return Optional.empty();
     }
 }
