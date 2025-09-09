@@ -6,17 +6,18 @@ import br.com.cbd.gestor_clientes.adapter.output.repository.ClienteRepository;
 import br.com.cbd.gestor_clientes.port.input.ClienteInputPort;
 import br.com.cbd.gestor_clientes.port.output.ClienteOutputPort;
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 public class ClienteUseCase implements ClienteInputPort {
 
-    private final ClienteOutputPort repository;
+    private final ClienteOutputPort clienteOutputPort;
     private final ClienteRepository clienteRepository;
 
     public ClienteUseCase(ClienteOutputPort repository, ClienteRepository clienteRepository) {
-        this.repository = repository;
+        this.clienteOutputPort = repository;
         this.clienteRepository = clienteRepository;
 
     }
@@ -25,21 +26,21 @@ public class ClienteUseCase implements ClienteInputPort {
     public Cliente create(Cliente cliente) {
         validarClienteParaCriacao(cliente);
 
-        if (repository.existsByCpf(cliente.getCpf())) {
+        if (clienteOutputPort.existsByCpf(cliente.getCpf())) {
             throw new NotFoundException("CPF já cadastrado.");
         }
-        if (repository.existsByEmail(cliente.getEmail())) {
+        if (clienteOutputPort.existsByEmail(cliente.getEmail())) {
             throw new NotFoundException("Email já cadastrado.");
         }
 
         cliente.setCriadoEm(LocalDateTime.now());
         cliente.setAtualizadoEm(LocalDateTime.now());
-        return repository.save(cliente);
+        return clienteOutputPort.save(cliente);
     }
 
 
     public Cliente update(Long id, Cliente cliente) {
-        Optional<Cliente> clienteExistente = repository.findById(id);
+        Optional<Cliente> clienteExistente = clienteOutputPort.findById(id);
         if (clienteExistente.isEmpty()) {
             throw new NotFoundException("Cliente não encontrado.");
         }
@@ -54,24 +55,24 @@ public class ClienteUseCase implements ClienteInputPort {
         cliente.setCriadoEm(clienteExistente.get().getCriadoEm());
         cliente.setAtualizadoEm(LocalDateTime.now());
 
-        return repository.update(cliente);
+        return clienteOutputPort.update(cliente);
     }
 
 
     public void delete(Long id) {
-        Optional<Cliente> cliente = repository.findById(id);
+        Optional<Cliente> cliente = clienteOutputPort.findById(id);
         if (cliente.isEmpty()) {
             throw new NotFoundException("Cliente não encontrado.");
         }
         Cliente clienteAtualizado = cliente.get();
         clienteAtualizado.setStatus("INATIVO");
         clienteAtualizado.setAtualizadoEm(LocalDateTime.now());
-        repository.update(clienteAtualizado);
+        clienteOutputPort.update(clienteAtualizado);
     }
 
 
     public Optional<Cliente> findById(Long id) {
-        Optional<Cliente> cliente = repository.findById(id);
+        Optional<Cliente> cliente = clienteOutputPort.findById(id);
         if (cliente.isEmpty()) {
             throw new NotFoundException("Cliente com ID " + id + " não encontrado.");
         }
@@ -80,7 +81,7 @@ public class ClienteUseCase implements ClienteInputPort {
 
 
     public List<Cliente> findAll() {
-        return repository.findAll();
+        return clienteOutputPort.findAll();
     }
 
 
@@ -137,12 +138,16 @@ public class ClienteUseCase implements ClienteInputPort {
             return true; // Opcional
         return telefone.matches("^\\+\\d{2}\\s?\\(?\\d{2}\\)?\\s?\\d{4,5}-?\\d{4}$");
     }
-    public int contarClientesAtivos(){
+
+    public int contarClientesAtivos() {
         return clienteRepository.contarClientesAtivos();
     }
 
-    @Override
     public Optional<Cliente> buscarPorCpf(String cpf) {
-        return Optional.empty();
+        Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
+        if (cliente.isEmpty()) {
+            throw new NotFoundException("Cliente com CPF " + cpf + " não encontrado.");
+        }
+        return cliente;
     }
 }
