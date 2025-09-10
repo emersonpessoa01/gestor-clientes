@@ -150,4 +150,7 @@ public class ClienteUseCase implements ClienteInputPort {
         }
         return cliente;
     }
+    public List<Cliente> listarAtivos() {
+        return clienteRepository.listarAtivos();
+    }
 }
