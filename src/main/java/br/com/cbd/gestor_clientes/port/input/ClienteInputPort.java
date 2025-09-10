@@ -14,4 +14,5 @@ public interface ClienteInputPort {
     boolean validarCpf(String cpf);
     int contarClientesAtivos();
     Optional<Cliente> buscarPorCpf(String cpf);
+    List<Cliente> listarAtivos();
 }
