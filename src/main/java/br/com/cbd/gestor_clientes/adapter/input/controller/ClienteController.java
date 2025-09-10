@@ -72,5 +72,10 @@ public class ClienteController implements SwaggerClienteController {
                         .map(cliente -> ResponseEntity.ok(mapper.toResponse(cliente)))
                         .orElse(ResponseEntity.notFound().build());
         }
+        @GetMapping("/ativos")
+        public ResponseEntity<List<ClienteResponse>> listarAtivos() {
+                List<Cliente> clientes = inputPort.listarAtivos();
+                return ResponseEntity.ok(mapper.toResponseList(clientes));
+        }
 
 }
