@@ -101,4 +101,13 @@ public interface SwaggerClienteController {
             @Parameter(description = "CPF do cliente", required = true, example = "111.444.777-35")
             @PathVariable String cpf);
 
+    @Operation(
+            summary = "Listar clientes ativos", description = "Retorna todos os clientes com status ATIVO")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista de clientes ativos retornada com sucesso",
+                    content = @Content(schema = @Schema(implementation = ClienteResponse.class), array = @ArraySchema)),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao buscar clientes ativos", content = @Content)
+    })
+    ResponseEntity<List<ClienteResponse>> listarAtivos();
+
 }
