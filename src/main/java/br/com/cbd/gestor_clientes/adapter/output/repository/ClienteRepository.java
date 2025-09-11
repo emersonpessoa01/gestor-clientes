@@ -148,6 +148,18 @@ public class ClienteRepository implements ClienteOutputPort {
         List<ClienteEntity> entities = jdbcTemplate.query(sql, rowMapper);
         return entities.stream().map(this::toDomain).toList();
     }
-
+    public List<Cliente> listarInativos() {
+        String sql = "SELECT * FROM fn_get_clientes_inativos()";
+        List<ClienteEntity> entities = jdbcTemplate.query(sql, rowMapper);
+        return entities.stream().map(this::toDomain).toList();
+    }
+    public void ativarCliente(Long id) {
+        String sql = "CALL pr_ativar_cliente(?)";
+        jdbcTemplate.update(sql, id);
+    }
+    public void inativarCliente(Long id) {
+        String sql = "CALL pr_inativar_cliente(?)";
+        jdbcTemplate.update(sql, id);
+    }
 
 }
