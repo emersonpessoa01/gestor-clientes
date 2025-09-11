@@ -108,7 +108,7 @@ public class ClienteRepository implements ClienteOutputPort {
 
     @Override
     public Optional<Cliente> findByCpf(String cpf) {
-        String sql = "SELECT * FROM cliente WHERE cpf = ?";
+        String sql = "SELECT * FROM fn_get_cliente_por_cpf(?)";
         List<ClienteEntity> entities = jdbcTemplate.query(sql, rowMapper, cpf);
         return entities.isEmpty() ? Optional.empty() : Optional.of(toDomain(entities.get(0)));
     }
@@ -140,7 +140,7 @@ public class ClienteRepository implements ClienteOutputPort {
     }
 
     public int contarClientesAtivos() {
-        String sql = "SELECT contar_clientes_ativos()";
+        String sql = "SELECT fn_count_clientes_ativos()";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
     public List<Cliente> listarAtivos() {
