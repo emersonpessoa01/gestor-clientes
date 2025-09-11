@@ -110,4 +110,31 @@ public interface SwaggerClienteController {
     })
     ResponseEntity<List<ClienteResponse>> listarAtivos();
 
+    @Operation(summary = "Listar clientes inativos", description = "Retorna todos os clientes com status INATIVO")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista de clientes inativos retornada com sucesso",
+                    content = @Content(schema = @Schema(implementation = ClienteResponse.class), array = @ArraySchema)),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao buscar clientes inativos", content = @Content)
+    })
+    ResponseEntity<List<ClienteResponse>> listarInativos();
+
+    @Operation(summary = "Ativar cliente", description = "Atualiza o status do cliente para ATIVO")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Cliente ativado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    })
+    ResponseEntity<Void> ativarCliente(@PathVariable Long id);
+
+    @Operation(summary = "Inativar cliente", description = "Atualiza o status do cliente para INATIVO")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Cliente inativado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    })
+    ResponseEntity<Void> inativarCliente(@PathVariable Long id);
+
+
+
+
+
+
 }
