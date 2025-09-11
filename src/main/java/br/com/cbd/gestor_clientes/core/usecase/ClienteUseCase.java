@@ -153,4 +153,19 @@ public class ClienteUseCase implements ClienteInputPort {
     public List<Cliente> listarAtivos() {
         return clienteRepository.listarAtivos();
     }
+    public List<Cliente> listarInativos() {
+        return clienteRepository.listarInativos();
+    }
+    public void ativarCliente(Long id){
+        Optional<Cliente> clienteOpt = clienteRepository.findById(id);
+        if(clienteOpt.isEmpty()){
+            throw new NotFoundException("Cliente com ID " + id + " não encontrado.");
+        }
+        clienteRepository.ativarCliente(id);
+    }
+    public void inativarCliente(Long id) {
+        Optional<Cliente> clienteOpt = clienteRepository.findById(id);
+        if (clienteOpt.isEmpty()) throw new NotFoundException("Cliente não encontrado.");
+        clienteRepository.inativarCliente(id);
+    }
 }
