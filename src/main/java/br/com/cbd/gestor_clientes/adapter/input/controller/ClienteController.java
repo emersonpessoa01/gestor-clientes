@@ -77,5 +77,23 @@ public class ClienteController implements SwaggerClienteController {
                 List<Cliente> clientes = inputPort.listarAtivos();
                 return ResponseEntity.ok(mapper.toResponseList(clientes));
         }
+        @GetMapping("/inativos")
+        public ResponseEntity<List<ClienteResponse>>listarInativos() {
+                List<Cliente> clientes = inputPort.listarInativos();
+                return ResponseEntity.ok(mapper.toResponseList(clientes));
+        }
+
+
+        @PutMapping("/{id}/ativar")
+        public ResponseEntity<Void> ativarCliente(@PathVariable Long id) {
+                inputPort.ativarCliente(id);
+                return ResponseEntity.noContent().build();
+        }
+        @PutMapping("/{id}/inativar")
+        public ResponseEntity<Void> inativarCliente(@PathVariable Long id) {
+                inputPort.inativarCliente(id);
+                return ResponseEntity.noContent().build();
+        }
+
 
 }
