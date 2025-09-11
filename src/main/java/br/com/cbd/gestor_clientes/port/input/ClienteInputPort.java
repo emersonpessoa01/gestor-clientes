@@ -15,4 +15,8 @@ public interface ClienteInputPort {
     int contarClientesAtivos();
     Optional<Cliente> buscarPorCpf(String cpf);
     List<Cliente> listarAtivos();
+    List<Cliente> listarInativos();
+    void ativarCliente(Long id);
+    void inativarCliente(Long id);
+
 }
