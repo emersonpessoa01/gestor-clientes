@@ -3,7 +3,7 @@ package br.com.cbd.gestor_clientes.adapter.output.entity;
 import java.time.LocalDateTime;
 
 public class ClienteEntity {
-    private Long id;
+    private Long id; // <-- agora Integer
     private String nome;
     private String email;
     private String telefone;
@@ -12,16 +12,13 @@ public class ClienteEntity {
     private LocalDateTime criadoEm;
     private LocalDateTime atualizadoEm;
 
-    // Construtores, getters e setters
-    public ClienteEntity() {
-
-    }
+    public ClienteEntity() {}
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id) { // <-- ajustado para Integer
         this.id = id;
     }
 
@@ -80,5 +77,4 @@ public class ClienteEntity {
     public void setAtualizadoEm(LocalDateTime atualizadoEm) {
         this.atualizadoEm = atualizadoEm;
     }
-
 }
