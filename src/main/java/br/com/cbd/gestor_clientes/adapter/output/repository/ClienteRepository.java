@@ -7,6 +7,7 @@ import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 import br.com.cbd.gestor_clientes.port.output.ClienteOutputPort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -27,7 +28,8 @@ public class ClienteRepository implements ClienteOutputPort {
 
     private RowMapper<ClienteEntity> rowMapper = (rs, rowNum) -> {
         ClienteEntity entity = new ClienteEntity();
-        entity.setId(rs.getLong("id"));
+        Integer id = (Integer) rs.getObject("id");
+        entity.setId(id != null ? id.longValue() : null);
         entity.setNome(rs.getString("nome"));
         entity.setEmail(rs.getString("email"));
         entity.setTelefone(rs.getString("telefone"));
