@@ -2,23 +2,14 @@ package br.com.cbd.gestor_clientes.adapter.output.repository;
 
 import br.com.cbd.gestor_clientes.adapter.output.entity.ClienteEntity;
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
-
-
 import br.com.cbd.gestor_clientes.port.output.ClienteOutputPort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-
-import org.springframework.jdbc.core.SqlOutParameter;
-import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
-
-import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -48,28 +39,20 @@ public class ClienteRepository implements ClienteOutputPort {
     public Cliente save(Cliente cliente) {
         ClienteEntity entity = toEntity(cliente);
 
+        // Spring vai buscar os metadados da function automaticamente
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withSchemaName("public")
-                .withFunctionName("fn_insert_cliente")
-                .declareParameters(
-                        new SqlParameter("p_nome", Types.VARCHAR),
-                        new SqlParameter("p_email", Types.VARCHAR),
-                        new SqlParameter("p_telefone", Types.VARCHAR),
-                        new SqlParameter("p_cpf", Types.VARCHAR),
-                        new SqlParameter("p_status", Types.VARCHAR),
-                        new SqlOutParameter("o_id", Types.INTEGER)
-                )
-                .withoutProcedureColumnMetaDataAccess();
+                .withFunctionName("fn_insert_cliente") // função que retorna o id
+                .withReturnValue(); // Indica que esperamos um valor de retorno
 
-        SqlParameterSource params = new MapSqlParameterSource()
+        MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("p_nome", entity.getNome())
                 .addValue("p_email", entity.getEmail())
                 .addValue("p_telefone", entity.getTelefone())
                 .addValue("p_cpf", entity.getCpf())
-                .addValue("p_status", entity.getStatus())
-                .addValue("o_id", entity.getId());
+                .addValue("p_status", entity.getStatus());
 
-        // O retorno da função é capturado diretamente como Integer
+        // Retorna o resultado diretamente, sem precisar declarar SqlOutParameter
         Integer id = jdbcCall.executeFunction(Integer.class, params);
 
         entity.setId(id != null ? id.longValue() : null);
