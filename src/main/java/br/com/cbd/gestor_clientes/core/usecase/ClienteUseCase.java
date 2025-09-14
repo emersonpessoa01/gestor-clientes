@@ -142,6 +142,9 @@ public class ClienteUseCase implements ClienteInputPort {
     public int contarClientesAtivos() {
         return clienteRepository.contarClientesAtivos();
     }
+    public int contarClientesInativos() {
+        return clienteRepository.contarClientesInativos();
+    }
 
     public Optional<Cliente> buscarPorCpf(String cpf) {
         Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
