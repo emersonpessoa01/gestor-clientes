@@ -89,6 +89,15 @@ public interface SwaggerClienteController {
     })
     ResponseEntity<Integer> contarAtivos();
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Quantidade de clientes inativos retornada com sucesso",
+                    content = @Content(schema = @Schema(implementation = Integer.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao tentar contar clientes inativos", content = @Content)
+    })
+    ResponseEntity<Integer> contarInativos();
+
+
+
     @Operation(
             summary = "Buscar cliente por CPF",
             description = "Retorna so detalhes de um cliente específico pelo CPF."
