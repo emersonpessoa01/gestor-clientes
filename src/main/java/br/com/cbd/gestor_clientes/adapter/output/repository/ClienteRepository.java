@@ -143,6 +143,10 @@ public class ClienteRepository implements ClienteOutputPort {
         String sql = "SELECT fn_count_clientes_ativos()";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
+    public int contarClientesInativos() {
+        String sql = "SELECT fn_count_clientes_inativos()";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
     public List<Cliente> listarAtivos() {
         String sql = "SELECT * FROM fn_get_clientes_ativos()";
         List<ClienteEntity> entities = jdbcTemplate.query(sql, rowMapper);
