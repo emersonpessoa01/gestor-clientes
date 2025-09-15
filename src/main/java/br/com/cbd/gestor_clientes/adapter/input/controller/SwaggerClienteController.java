@@ -1,6 +1,7 @@
 package br.com.cbd.gestor_clientes.adapter.input.controller;
 
 
+import br.com.cbd.gestor_clientes.adapter.input.response.ClienteResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.cbd.gestor_clientes.adapter.input.request.ClienteRequest;
-import br.com.cbd.gestor_clientes.adapter.input.request.ClienteResponse;
 
 import java.util.List;
 
@@ -97,7 +97,6 @@ public interface SwaggerClienteController {
     ResponseEntity<Integer> contarInativos();
 
 
-
     @Operation(
             summary = "Buscar cliente por CPF",
             description = "Retorna so detalhes de um cliente específico pelo CPF."
@@ -140,10 +139,5 @@ public interface SwaggerClienteController {
             @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
     })
     ResponseEntity<Void> inativarCliente(@PathVariable Long id);
-
-
-
-
-
 
 }
