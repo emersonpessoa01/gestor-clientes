@@ -1,7 +1,5 @@
 package br.com.cbd.gestor_clientes.core.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
 
 public class Cliente {
@@ -11,11 +9,7 @@ public class Cliente {
     private String telefone;
     private String cpf;
     private String status;
-
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime criadoEm;
-
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime atualizadoEm;
 
     // Construtores, getters e setters
