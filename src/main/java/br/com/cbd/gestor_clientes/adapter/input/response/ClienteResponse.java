@@ -1,15 +1,28 @@
-package br.com.cbd.gestor_clientes.adapter.input.request;
+package br.com.cbd.gestor_clientes.adapter.input.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
+@Schema(description = "Resposta contendo os dados de um cliente")
 public class ClienteResponse {
+    @Schema(description = "Identificador único do cliente", example = "1")
     private Long id;
+
+    @Schema(description = "Nome completo do cliente", example = "João da Silva")
     private String nome;
+
+    @Schema(description = "Endereço de email do cliente", example = "joao@mail.com")
     private String email;
+
+    @Schema(description = "Número de telefone do cliente", example = "(11) 91234-5678")
     private String telefone;
+
+    @Schema(description = "CPF do cliente", example = "123.456.789-00")
     private String cpf;
+
+    @Schema(description = "Status do cliente (ATIVO, INATIVO ou PROSPECT)", example = "ATIVO")
     private String status;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
