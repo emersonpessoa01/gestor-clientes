@@ -23,7 +23,7 @@ public class ClienteRepository implements ClienteOutputPort {
 
     private RowMapper<ClienteEntity> rowMapper = (rs, rowNum) -> {
         ClienteEntity entity = new ClienteEntity();
-        Integer id = (Integer) rs.getObject("id");
+        Long id = rs.getObject("id", Long.class);
         entity.setId(id != null ? id.longValue() : null);
         entity.setNome(rs.getString("nome"));
         entity.setEmail(rs.getString("email"));
@@ -53,7 +53,7 @@ public class ClienteRepository implements ClienteOutputPort {
                 .addValue("p_status", entity.getStatus());
 
         // Retorna o resultado diretamente, sem precisar declarar SqlOutParameter
-        Integer id = jdbcCall.executeFunction(Integer.class, params);
+        Long id = jdbcCall.executeFunction(Long.class, params);
 
         entity.setId(id != null ? id.longValue() : null);
 
@@ -95,14 +95,14 @@ public class ClienteRepository implements ClienteOutputPort {
     @Override
     public boolean existsByCpf(String cpf) {
         String sql = "SELECT COUNT(*) FROM cliente WHERE cpf = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, cpf);
+        Long count = jdbcTemplate.queryForObject(sql, Long.class, cpf);
         return count != null && count > 0;
     }
 
     @Override
     public boolean existsByEmail(String email) {
         String sql = "SELECT COUNT(*) FROM cliente WHERE email = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
+        Long count = jdbcTemplate.queryForObject(sql, Long.class, email);
         return count != null && count > 0;
     }
 
@@ -141,11 +141,13 @@ public class ClienteRepository implements ClienteOutputPort {
 
     public int contarClientesAtivos() {
         String sql = "SELECT fn_count_clientes_ativos()";
-        return jdbcTemplate.queryForObject(sql, Integer.class);
+        Long count =  jdbcTemplate.queryForObject(sql, Long.class);
+        return count != null ? count.intValue() : 0;
     }
     public int contarClientesInativos() {
         String sql = "SELECT fn_count_clientes_inativos()";
-        return jdbcTemplate.queryForObject(sql, Integer.class);
+        Long count =  jdbcTemplate.queryForObject(sql, Long.class);
+        return count != null ? count.intValue() : 0;
     }
     public List<Cliente> listarAtivos() {
         String sql = "SELECT * FROM fn_get_clientes_ativos()";
