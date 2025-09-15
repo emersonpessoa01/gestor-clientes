@@ -1,10 +1,10 @@
 package br.com.cbd.gestor_clientes.adapter.input.controller;
 
 import br.com.cbd.gestor_clientes.adapter.input.exception.NotFoundException;
+import br.com.cbd.gestor_clientes.adapter.input.response.ClienteResponse;
 import br.com.cbd.gestor_clientes.port.input.ClienteInputPort;
 import br.com.cbd.gestor_clientes.adapter.input.mapper.ClienteMapper;
 import br.com.cbd.gestor_clientes.adapter.input.request.ClienteRequest;
-import br.com.cbd.gestor_clientes.adapter.input.request.ClienteResponse;
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
-public class ClienteController implements SwaggerClienteController {
+public class ClienteController implements SwaggerClienteController  {
 
         private final ClienteInputPort inputPort;
         private final ClienteMapper mapper;
@@ -27,7 +27,7 @@ public class ClienteController implements SwaggerClienteController {
         public ResponseEntity<ClienteResponse> criar(@RequestBody ClienteRequest request) {
                 Cliente cliente = mapper.toModel(request);
                 Cliente salvo = inputPort.create(cliente);
-                return ResponseEntity.ok(mapper.toResponse(salvo));
+                return ResponseEntity.status(201).body(mapper.toResponse(salvo));
         }
 
         @PutMapping("/{id}")
