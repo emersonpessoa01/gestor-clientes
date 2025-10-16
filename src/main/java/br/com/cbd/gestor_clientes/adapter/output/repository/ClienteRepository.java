@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -35,16 +36,27 @@ public class ClienteRepository implements ClienteOutputPort {
         return entity;
     };
 
+    /**
+     * Cria e configura uma instância de SimpleJdbcCall para execução
+     * da função PostgreSQL responsável por inserir um cliente.
+     *
+     * @return uma instância de SimpleJdbcCall configurada com schema e função.
+     */
+    protected SimpleJdbcCall createSimpleJdbcCall() {
+        return new SimpleJdbcCall(jdbcTemplate)
+                .withSchemaName("public")
+                .withFunctionName("fn_insert_cliente")
+                .withReturnValue();
+    }
+
     @Override
     public Cliente save(Cliente cliente) {
         ClienteEntity entity = toEntity(cliente);
 
-        // Spring vai buscar os metadados da function automaticamente
-        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
-                .withSchemaName("public")
-                .withFunctionName("fn_insert_cliente") // função que retorna o id
-                .withReturnValue(); // Indica que esperamos um valor de retorno
+        // Cria a chamada JDBC configurada para a função fn_insert_cliente()
+        SimpleJdbcCall jdbcCall = createSimpleJdbcCall();
 
+        // Define os parâmetros de entrada esperados pela função no banco
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("p_nome", entity.getNome())
                 .addValue("p_email", entity.getEmail())
@@ -52,11 +64,13 @@ public class ClienteRepository implements ClienteOutputPort {
                 .addValue("p_cpf", entity.getCpf())
                 .addValue("p_status", entity.getStatus());
 
-        // Retorna o resultado diretamente, sem precisar declarar SqlOutParameter
+        // Executa a função no banco e obtém o ID retornado
         Long id = jdbcCall.executeFunction(Long.class, params);
 
-        entity.setId(id != null ? id.longValue() : null);
+        // Atualiza o ID da entidade com o valor retornado
+        entity.setId(id != null ? id : null);
 
+        // Converte de volta para o modelo de domínio e retorna
         return toDomain(entity);
     }
 
@@ -141,28 +155,33 @@ public class ClienteRepository implements ClienteOutputPort {
 
     public int contarClientesAtivos() {
         String sql = "SELECT fn_count_clientes_ativos()";
-        Long count =  jdbcTemplate.queryForObject(sql, Long.class);
+        Long count = jdbcTemplate.queryForObject(sql, Long.class);
         return count != null ? count.intValue() : 0;
     }
+
     public int contarClientesInativos() {
         String sql = "SELECT fn_count_clientes_inativos()";
-        Long count =  jdbcTemplate.queryForObject(sql, Long.class);
+        Long count = jdbcTemplate.queryForObject(sql, Long.class);
         return count != null ? count.intValue() : 0;
     }
+
     public List<Cliente> listarAtivos() {
         String sql = "SELECT * FROM fn_get_clientes_ativos()";
         List<ClienteEntity> entities = jdbcTemplate.query(sql, rowMapper);
         return entities.stream().map(this::toDomain).toList();
     }
+
     public List<Cliente> listarInativos() {
         String sql = "SELECT * FROM fn_get_clientes_inativos()";
         List<ClienteEntity> entities = jdbcTemplate.query(sql, rowMapper);
         return entities.stream().map(this::toDomain).toList();
     }
+
     public void ativarCliente(Long id) {
         String sql = "CALL pr_ativar_cliente(?)";
         jdbcTemplate.update(sql, id);
     }
+
     public void inativarCliente(Long id) {
         String sql = "CALL pr_inativar_cliente(?)";
         jdbcTemplate.update(sql, id);
