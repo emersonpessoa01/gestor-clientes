@@ -38,8 +38,8 @@ class ClienteUseCaseTest {
     void setUp() {
         cliente = new Cliente(
                 1L,
-                "João Silva",
-                "joao@email.com",
+                "Sabine Wren",
+                "sabinewren@gmail.com",
                 "+55(11)99999-9999",
                 "11144477735",
                 "ATIVO",
@@ -59,7 +59,7 @@ class ClienteUseCaseTest {
         // Then
         assertThat(resultado).isNotNull();
         assertThat(resultado.getNome())
-                .isEqualTo("João Silva");
+                .isEqualTo("Sabine Wren");
         verify(repository, times(1))
                 .save(any(Cliente.class));
     }
