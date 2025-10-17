@@ -63,4 +63,19 @@ class ClienteUseCaseTest {
         verify(repository, times(1))
                 .save(any(Cliente.class));
     }
+    //------------------------------------------------------------------
+    @Test
+    @DisplayName("Deve buscar cliente por ID com sucesso")
+    void deveBuscarClientePorIdComSucesso(){
+        // Given
+        when(repository.findById(1L)).thenReturn(Optional.of(cliente));
+
+        // When
+        Optional<Cliente> resultado = useCase.findById(1L);
+
+        // Then
+        assertThat(resultado).isPresent();
+        assertThat(resultado.get().getEmail()).isEqualTo("sabinewren@gmail.com");
+        verify(repository, times(1)).findById(1L);
+    }
 }
