@@ -47,6 +47,7 @@ class ClienteUseCaseTest {
                 null
         );
     }
+    // ------------------------------------------------------------------
     @Test
     @DisplayName("Deve criar cliente com sucesso")
     void deveCriarClienteComSucesso() {
@@ -77,5 +78,18 @@ class ClienteUseCaseTest {
         assertThat(resultado).isPresent();
         assertThat(resultado.get().getEmail()).isEqualTo("sabinewren@gmail.com");
         verify(repository, times(1)).findById(1L);
+    }
+    //------------------------------------------------------------------
+    @Test
+    @DisplayName("Deve lançar exceção ao buscar cliente inexistente por ID")
+    void deveLancarExcecaoQuandoClienteNaoExistir() {
+        // Given
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+
+        // When / Then
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> useCase.findById(99L));
+
+        assertThat(exception.getMessage()).contains("Cliente com ID 99 não encontrado");
+        verify(repository, times(1)).findById(99L);
     }
 }
