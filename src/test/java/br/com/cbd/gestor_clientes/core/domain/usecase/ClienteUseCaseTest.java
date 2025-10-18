@@ -92,4 +92,20 @@ class ClienteUseCaseTest {
         assertThat(exception.getMessage()).contains("Cliente com ID 99 não encontrado");
         verify(repository, times(1)).findById(99L);
     }
+    //------------------------------------------------------------------
+    @Test
+    @DisplayName("Deve listar todos os clientes com suesso")
+    void deveListartodosOsClientesComSucesso(){
+        // Given
+        when(repository.findAll()).thenReturn(List.of(cliente));
+
+        // When
+        List<Cliente> resultado = useCase.findAll();
+
+        // Then
+        assertThat(resultado).isNotEmpty();
+        assertThat(resultado).hasSize(1);
+        assertThat(resultado.get(0).getCpf()).isEqualTo("11144477735");
+        verify(repository,times(1)).findAll();
+    }
 }
