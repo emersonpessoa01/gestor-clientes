@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -39,7 +38,7 @@ class ClienteUseCaseTest {
         cliente = new Cliente(
                 1L,
                 "Sabine Wren",
-                "sabinewren@gmail.com",
+                "sabinewren@mandalore.com",
                 "+55(11)99999-9999",
                 "11144477735",
                 "ATIVO",
@@ -76,7 +75,7 @@ class ClienteUseCaseTest {
 
         // Then
         assertThat(resultado).isPresent();
-        assertThat(resultado.get().getEmail()).isEqualTo("sabinewren@gmail.com");
+        assertThat(resultado.get().getEmail()).isEqualTo("sabinewren@mandalore.com");
         verify(repository, times(1)).findById(1L);
     }
     //------------------------------------------------------------------
@@ -108,4 +107,44 @@ class ClienteUseCaseTest {
         assertThat(resultado.get(0).getCpf()).isEqualTo("11144477735");
         verify(repository,times(1)).findAll();
     }
+    //------------------------------------------------------------------
+    @Test
+    @DisplayName("Deve atualizar cliente com sucesso")
+    void deveAtualizarClienteComSucesso() {
+        // Given
+        Cliente existente = new Cliente(
+                1L,
+                "Sabine Wren",
+                "sabinewren@gmail.com",
+                "+55(11)99999-9999",
+                "11144477735",
+                "ATIVO",
+                null,
+                null
+        );
+
+        Cliente atualizado = new Cliente(
+                1L,
+                "Sabine Ren",
+                "sabinewren@mandalore.com",
+                "+55(11)98888-8888",
+                "11144477735",
+                "ATIVO",
+                null,
+                null
+        );
+
+        when(repository.findById(1L)).thenReturn(Optional.of(existente)); // ✅ importante
+        when(repository.update(any(Cliente.class))).thenReturn(atualizado);
+
+        // When
+        Cliente resultado = useCase.update(1L, atualizado);
+
+        // Then
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getEmail()).isEqualTo("sabinewren@mandalore.com");
+        verify(repository, times(1)).findById(1L);
+        verify(repository, times(1)).update(any(Cliente.class));
+    }
+
 }
