@@ -68,6 +68,7 @@ public class ClienteUseCase implements ClienteInputPort {
         clienteAtualizado.setStatus("INATIVO");
         clienteAtualizado.setAtualizadoEm(LocalDateTime.now());
         clienteOutputPort.update(clienteAtualizado);
+        clienteRepository.delete(1L);
     }
 
 
