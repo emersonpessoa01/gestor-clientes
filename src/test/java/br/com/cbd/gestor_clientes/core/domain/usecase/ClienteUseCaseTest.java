@@ -47,6 +47,7 @@ class ClienteUseCaseTest {
         );
     }
     // ------------------------------------------------------------------
+    // ✅ Criação de cliente (create)
     @Test
     @DisplayName("Deve criar cliente com sucesso")
     void deveCriarClienteComSucesso() {
@@ -64,6 +65,7 @@ class ClienteUseCaseTest {
                 .save(any(Cliente.class));
     }
     //------------------------------------------------------------------
+    // ✅ Busca por ID (findById)
     @Test
     @DisplayName("Deve buscar cliente por ID com sucesso")
     void deveBuscarClientePorIdComSucesso(){
@@ -79,6 +81,7 @@ class ClienteUseCaseTest {
         verify(repository, times(1)).findById(1L);
     }
     //------------------------------------------------------------------
+    // Exceção ao não encontrar cliente
     @Test
     @DisplayName("Deve lançar exceção ao buscar cliente inexistente por ID")
     void deveLancarExcecaoQuandoClienteNaoExistir() {
@@ -92,6 +95,7 @@ class ClienteUseCaseTest {
         verify(repository, times(1)).findById(99L);
     }
     //------------------------------------------------------------------
+    // ✅ Listagem (findAll)
     @Test
     @DisplayName("Deve listar todos os clientes com suesso")
     void deveListartodosOsClientesComSucesso(){
@@ -108,6 +112,7 @@ class ClienteUseCaseTest {
         verify(repository,times(1)).findAll();
     }
     //------------------------------------------------------------------
+    // ✅ Atualização (update)
     @Test
     @DisplayName("Deve atualizar cliente com sucesso")
     void deveAtualizarClienteComSucesso() {
@@ -134,7 +139,7 @@ class ClienteUseCaseTest {
                 null
         );
 
-        when(repository.findById(1L)).thenReturn(Optional.of(existente)); // ✅ importante
+        when(repository.findById(1L)).thenReturn(Optional.of(existente));
         when(repository.update(any(Cliente.class))).thenReturn(atualizado);
 
         // When
@@ -145,6 +150,33 @@ class ClienteUseCaseTest {
         assertThat(resultado.getEmail()).isEqualTo("sabinewren@mandalore.com");
         verify(repository, times(1)).findById(1L);
         verify(repository, times(1)).update(any(Cliente.class));
+    }
+    //------------------------------------------------------------------
+    // ✅ Exclusão (delete)
+    @Test
+    @DisplayName("Deve deletar cliente com sucesso")
+    void deveDeletarClienteComSucesso(){
+        // Given
+        Cliente existente = new Cliente(
+                1L,
+                "Sabine Wren",
+                "sabinewren@mandalore.com",
+                "+55(11)99999-9999",
+                "11144477735",
+                "ATIVO",
+                null,
+                null
+        );
+        // Simula que o cliente existe no repositório
+        when(repository.findById(1L)).thenReturn(Optional.of(existente));
+        doNothing().when(repository).delete(1L);
+
+        // When
+        useCase.delete(1L);
+
+        // Then
+        verify(repository, times(1)).findById(1L);
+        verify(repository, times(1)).delete(1L);
     }
 
 }
