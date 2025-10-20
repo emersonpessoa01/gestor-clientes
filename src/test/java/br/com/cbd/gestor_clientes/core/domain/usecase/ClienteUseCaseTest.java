@@ -178,5 +178,21 @@ class ClienteUseCaseTest {
         verify(repository, times(1)).findById(1L);
         verify(repository, times(1)).delete(1L);
     }
+    //✅ Verificação de existência (existsByCpf)
+    @Test
+    @DisplayName("Deve verificar se cliente existe por CPF")
+    void deveVerificarSEClienteExistePorCpf(){
+        // Given
+        when(repository.existsByCpf("11144477735")).thenReturn(true);
+
+        // When
+        boolean existe = useCase.existsByCpf("11144477735");
+
+        // Then
+        assertThat(existe).isTrue();
+        verify(repository, times(1)).existsByCpf("11144477735");
+
+    }
+    //✅ Busca por CPF (findByCpf)
 
 }
