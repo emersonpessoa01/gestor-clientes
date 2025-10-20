@@ -181,7 +181,7 @@ class ClienteUseCaseTest {
     //✅ Verificação de existência (existsByCpf)
     @Test
     @DisplayName("Deve verificar se cliente existe por CPF")
-    void deveVerificarSEClienteExistePorCpf(){
+    void deveVerificarSeClienteExistePorCpf(){
         // Given
         when(repository.existsByCpf("11144477735")).thenReturn(true);
 
@@ -194,5 +194,19 @@ class ClienteUseCaseTest {
 
     }
     //✅ Busca por CPF (findByCpf)
+    @Test
+    @DisplayName("Deve buscar cliente por CPF com sucesso")
+    void deveBuscarClientePorCpfComSucesso(){
+        // Given
+        when(repository.findById(Long.valueOf("11144477735"))).thenReturn(Optional.of(cliente));
+
+        // When
+        Optional<Cliente> resultado= useCase.findById(Long.valueOf("11144477735"));
+
+        // Then
+        assertThat(resultado).isPresent();
+        assertThat(resultado.get().getNome()).isEqualTo("Sabine Wren");
+        verify(repository, times(1)).findById(Long.valueOf("11144477735"));
+    }
 
 }
