@@ -37,6 +37,10 @@ public class ClienteUseCase implements ClienteInputPort {
         cliente.setAtualizadoEm(LocalDateTime.now());
         return clienteOutputPort.save(cliente);
     }
+    // Expondo publicamente esse metodo utiliário para reutilização e testabilidade
+    public boolean existsByCpf(String cpf){
+        return clienteOutputPort.existsByCpf(cpf);
+    }
 
 
     public Cliente update(Long id, Cliente cliente) {
