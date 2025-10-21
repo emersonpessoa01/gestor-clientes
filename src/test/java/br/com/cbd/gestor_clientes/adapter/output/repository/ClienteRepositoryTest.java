@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ClienteRepositoryTest {
+class ClienteRepositoryTest {
     @Mock
     private JdbcTemplate jdbcTemplate;
 
