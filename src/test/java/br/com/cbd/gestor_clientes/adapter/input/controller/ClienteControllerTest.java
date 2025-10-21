@@ -1,6 +1,7 @@
 package br.com.cbd.gestor_clientes.adapter.input.controller;
 
 import br.com.cbd.gestor_clientes.adapter.input.mapper.ClienteMapper;
+import br.com.cbd.gestor_clientes.adapter.input.request.ClienteRequest;
 import br.com.cbd.gestor_clientes.adapter.input.response.ClienteResponse;
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 import br.com.cbd.gestor_clientes.port.input.ClienteInputPort;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -49,6 +51,8 @@ class ClienteControllerTest {
 
     private ClienteResponse clienteResponse;
 
+    private ClienteRequest clienteRequest;
+
     @BeforeEach
     void setUp() {
         cliente = new Cliente(
@@ -72,8 +76,19 @@ class ClienteControllerTest {
                 null,
                 null
         );
+
+        clienteRequest = new ClienteRequest(
+                "Sabine Wren",
+                "sabinewren@gmail.com",
+                "+55(11)99999-9999",
+                "11144477735",
+                "ATIVO"
+        );
     }
 
+    // ------------------------------------------------------------
+    // ✅ GET /clientes - Listagem
+    // ------------------------------------------------------------
     @Test
     @DisplayName("Deve retornar status 200 e lista de clientes ao listar todos")
     void deveListarClientes() throws Exception {
@@ -96,9 +111,10 @@ class ClienteControllerTest {
         verify(useCase, times(1)).findAll();
         verify(clienteMapper, times(1)).toResponseList(anyList());
     }
-    // ------------------------------------------------------
-    // GET /clientes/{id}
-    // ------------------------------------------------------
+
+    // ------------------------------------------------------------
+    // ✅ GET /clientes/{id} - Busca por ID
+    // ------------------------------------------------------------
     @Test
     @DisplayName("Deve retornar cliente ao buscar por ID existente")
     void deveBuscarClientePorId() throws Exception {
@@ -120,5 +136,27 @@ class ClienteControllerTest {
                 .andExpect(jsonPath("$.cpf").value("11144477735"));
 
         verify(useCase, times(1)).findById(1L);
+    }
+
+    // ------------------------------------------------------------
+    // ✅ POST /clientes - Criação
+    // ------------------------------------------------------------
+    @Test
+    @DisplayName("Deve criar cliente com sucesso e retornar status 201")
+    void deveCriarClienteComSucesso() throws Exception {
+        // Given
+        when(clienteMapper.toModel(any(ClienteRequest.class))).thenReturn(cliente);
+        when(useCase.create(any(Cliente.class))).thenReturn(cliente);
+        when(clienteMapper.toResponse(any(Cliente.class))).thenReturn(clienteResponse);
+
+        // When / Then
+        mockMvc.perform(post("/clientes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(clienteRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.nome").value("Sabine Wren"))
+                .andExpect(jsonPath("$.cpf").value("11144477735"));
+
+        verify(useCase, times(1)).create(any(Cliente.class));
     }
 }
