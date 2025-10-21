@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -94,5 +95,30 @@ class ClienteControllerTest {
         // Then
         verify(useCase, times(1)).findAll();
         verify(clienteMapper, times(1)).toResponseList(anyList());
+    }
+    // ------------------------------------------------------
+    // GET /clientes/{id}
+    // ------------------------------------------------------
+    @Test
+    @DisplayName("Deve retornar cliente ao buscar por ID existente")
+    void deveBuscarClientePorId() throws Exception {
+        // Given: Simula a camada use case retornando entidades
+        when(useCase.findById(1L)).thenReturn(Optional.of(cliente));
+
+        // Simula o mapper convertendo entidades em respostas
+        when(clienteMapper.toResponse(any(Cliente.class)))
+                .thenReturn(clienteResponse);
+        when(clienteMapper.toResponseList(anyList()))
+                .thenReturn(Arrays.asList(clienteResponse));
+
+
+        // When / Then
+        mockMvc.perform(get("/clientes/{id}", 1L)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value("Sabine Wren"))
+                .andExpect(jsonPath("$.cpf").value("11144477735"));
+
+        verify(useCase, times(1)).findById(1L);
     }
 }
