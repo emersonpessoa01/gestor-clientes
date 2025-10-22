@@ -7,11 +7,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 
 @DisplayName("Teste de unidade do ClienteMapper")
-public class ClienteMapperTest {
+class ClienteMapperTest {
 
     // Obtém a implementação gerada automaticamente pelo MapStruct
     private final ClienteMapper mapper = Mappers.getMapper(ClienteMapper.class);
@@ -40,9 +42,10 @@ public class ClienteMapperTest {
         assertThat(cliente.getStatus()).isEqualTo(request.getStatus());
 
     }
+
     @Test
     @DisplayName("Deve converter Clienteem ClienteResponse corretamente")
-    void deveConverterModelParaResponse(){
+    void deveConverterModelParaResponse() {
         // Given
         Cliente cliente = new Cliente();
         cliente.setId(1L);
@@ -64,6 +67,24 @@ public class ClienteMapperTest {
         assertThat(response.getTelefone()).isEqualTo(cliente.getTelefone());
         assertThat(response.getCpf()).isEqualTo(cliente.getCpf());
         assertThat(response.getStatus()).isEqualTo(cliente.getStatus());
+    }
+
+    @Test
+    @DisplayName("Deve converter lista de Clientes em lista de Responses corretamente")
+    void deveConverterListaModelParaListaResponse() {
+        // Given
+        Cliente cliente1 = new Cliente(1L, "João", "joao@teste.com", "11111-1111", "11111111111", "ATIVO");
+        Cliente cliente2 = new Cliente(2L, "Maria", "maria@teste.com", "22222-2222", "22222222222", "INATIVO");
+
+        // When
+        List<ClienteResponse> responses = mapper.toResponseList(List.of(cliente1, cliente2));
+
+        // Then
+        assertThat(responses)
+                .isNotNull()
+                .hasSize(2)
+                .extracting(ClienteResponse::getNome)
+                .containsExactly("João", "Maria");
     }
 
 }
