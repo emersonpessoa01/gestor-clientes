@@ -20,8 +20,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -158,5 +157,25 @@ class ClienteControllerTest {
                 .andExpect(jsonPath("$.cpf").value("11144477735"));
 
         verify(useCase, times(1)).create(any(Cliente.class));
+    }
+    // ------------------------------------------------------------
+    // ✅ PUT /clientes/{id} - Atualização
+    // ------------------------------------------------------------
+    @Test
+    @DisplayName("Deve atualizar cliente com sucesso e retornar status 200")
+    void deveAtualizarClienteComSucesso() throws Exception {
+        // Given
+        when(clienteMapper.toModel(any(ClienteRequest.class))).thenReturn(cliente);
+        when(useCase.update(eq(1L), any(Cliente.class))).thenReturn(cliente);
+        when(clienteMapper.toResponse(any(Cliente.class))).thenReturn(clienteResponse);
+
+        // When / Then
+        mockMvc.perform(put("/clientes/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(clienteRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value("Sabine Wren"));
+
+        verify(useCase, times(1)).update(eq(1L), any(Cliente.class));
     }
 }
