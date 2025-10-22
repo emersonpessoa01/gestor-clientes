@@ -16,6 +16,16 @@ public class Cliente {
 
     public Cliente() {
     }
+    public Cliente(Long id, String nome, String email, String telefone, String cpf, String status) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.status = status;
+        this.criadoEm = null;
+        this.atualizadoEm = null;
+    }
 
     public Cliente(Long id, String nome, String email, String telefone, String cpf, String status,
             LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
