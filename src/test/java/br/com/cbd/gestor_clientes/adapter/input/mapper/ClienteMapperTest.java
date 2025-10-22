@@ -1,6 +1,7 @@
 package br.com.cbd.gestor_clientes.adapter.input.mapper;
 
 import br.com.cbd.gestor_clientes.adapter.input.request.ClienteRequest;
+import br.com.cbd.gestor_clientes.adapter.input.response.ClienteResponse;
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,4 +40,30 @@ public class ClienteMapperTest {
         assertThat(cliente.getStatus()).isEqualTo(request.getStatus());
 
     }
+    @Test
+    @DisplayName("Deve converter Clienteem ClienteResponse corretamente")
+    void deveConverterModelParaResponse(){
+        // Given
+        Cliente cliente = new Cliente();
+        cliente.setId(1L);
+        cliente.setNome("Ezra Bridge");
+        cliente.setEmail("ezrabridge@gmail.com");
+        cliente.setTelefone("98888-7777");
+        cliente.setCpf("12345678900");
+        cliente.setStatus("INATIVO");
+
+
+        // When
+        ClienteResponse response = mapper.toResponse(cliente);
+
+        // Then
+        assertThat(response).isNotNull();
+        assertThat(response.getId()).isEqualTo(cliente.getId());
+        assertThat(response.getNome()).isEqualTo(cliente.getNome());
+        assertThat(response.getEmail()).isEqualTo(cliente.getEmail());
+        assertThat(response.getTelefone()).isEqualTo(cliente.getTelefone());
+        assertThat(response.getCpf()).isEqualTo(cliente.getCpf());
+        assertThat(response.getStatus()).isEqualTo(cliente.getStatus());
+    }
+
 }
