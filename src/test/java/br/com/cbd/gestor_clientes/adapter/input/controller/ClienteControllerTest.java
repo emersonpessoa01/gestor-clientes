@@ -178,4 +178,18 @@ class ClienteControllerTest {
 
         verify(useCase, times(1)).update(eq(1L), any(Cliente.class));
     }
+    // ------------------------------------------------------------
+    // DELETE /clientes/{id}
+    // ------------------------------------------------------------
+    @Test
+    @DisplayName("Given cliente existe -> When DELETE /clientes/{id} -> Then retorna204")
+    void deveDeletarClienteComSucesso() throws Exception{
+        // Given
+        doNothing().when(useCase).delete(1L);
+
+        // When / Then
+        mockMvc.perform(delete("/clientes/{id}", 1L))
+                .andExpect(status().isNoContent());
+        verify(useCase, times(1)).delete(1L);
+    }
 }
