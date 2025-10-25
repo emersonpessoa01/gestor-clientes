@@ -127,7 +127,7 @@ public class ClienteRepository implements ClienteOutputPort {
         return entities.isEmpty() ? Optional.empty() : Optional.of(toDomain(entities.get(0)));
     }
 
-    private ClienteEntity toEntity(Cliente cliente) {
+    ClienteEntity toEntity(Cliente cliente) {
         ClienteEntity entity = new ClienteEntity();
         entity.setId(cliente.getId());
         entity.setNome(cliente.getNome());
