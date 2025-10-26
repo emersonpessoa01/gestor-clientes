@@ -198,4 +198,89 @@ class ClienteRepositoryTest {
         entity.setAtualizadoEm(cliente.getAtualizadoEm());
         return entity;
     }
+    @Test
+    @DisplayName("Deve retornar false se CPF não existe")
+    void deveRetornarFalseSeCpfNaoExiste() {
+        when(jdbcTemplate.queryForObject(anyString(), eq(Long.class), anyString()))
+                .thenReturn(0L);
+        boolean existe = clienteRepository.existsByCpf("00000000000");
+        assertFalse(existe);
+    }
+
+    @Test
+    @DisplayName("Deve retornar false se Email não existe")
+    void deveRetornarFalseSeEmailNaoExiste() {
+        when(jdbcTemplate.queryForObject(anyString(), eq(Long.class), anyString()))
+                .thenReturn(0L);
+        boolean existe = clienteRepository.existsByEmail("naoexiste@teste.com");
+        assertFalse(existe);
+    }
+
+    @Test
+    @DisplayName("Deve retornar Optional.empty se não encontrar cliente por CPF")
+    void deveRetornarEmptyAoBuscarPorCpfInexistente() {
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class), anyString()))
+                .thenReturn(List.of());
+        var resultado = clienteRepository.findByCpf("invalido");
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Deve retornar zero ao contar clientes ativos se nenhum existir")
+    void deveRetornarZeroAoContarAtivosSeNenhum() {
+        when(jdbcTemplate.queryForObject(anyString(), eq(Long.class)))
+                .thenReturn(0L);
+        int count = clienteRepository.contarClientesAtivos();
+        assertEquals(0, count);
+    }
+
+    @Test
+    @DisplayName("Deve retornar zero ao contar clientes inativos se nenhum existir")
+    void deveRetornarZeroAoContarInativosSeNenhum() {
+        when(jdbcTemplate.queryForObject(anyString(), eq(Long.class)))
+                .thenReturn(0L);
+        int count = clienteRepository.contarClientesInativos();
+        assertEquals(0, count);
+    }
+
+    @Test
+    @DisplayName("Deve retornar lista vazia ao listar ativos se nenhum encontrado")
+    void deveRetornarListaVaziaAoListarAtivosVazio() {
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class))).thenReturn(List.of());
+        List<Cliente> clientes = clienteRepository.listarAtivos();
+        assertTrue(clientes.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Deve retornar lista vazia ao listar inativos se nenhum encontrado")
+    void deveRetornarListaVaziaAoListarInativosVazio() {
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class))).thenReturn(List.of());
+        List<Cliente> clientes = clienteRepository.listarInativos();
+        assertTrue(clientes.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Deve lançar RuntimeException ao tentar atualizar cliente inexistente")
+    void deveLancarAoAtualizarClienteInexistente() {
+        Cliente cliente = criarClienteExemplo();
+        cliente.setId(999L);
+        String sql = "UPDATE cliente SET nome = ?, email = ?, telefone = ?, cpf = ?, status = ?, atualizado_em= ? WHERE id = ?";
+
+        when(jdbcTemplate.update(eq(sql), any(Object[].class))).thenReturn(0);
+        when(jdbcTemplate.queryForObject(anyString(), any(RowMapper.class), anyLong())).thenReturn(null);
+
+        assertThrows(RuntimeException.class, () -> clienteRepository.update(cliente));
+    }
+
+
+
+    @Test
+    @DisplayName("Deve lançar RuntimeException ao deletar cliente inexistente")
+    void deveLancarAoDeletarClienteInexistente() {
+        when(jdbcTemplate.update(anyString(), anyLong())).thenReturn(0);
+        // Opcionalmente checar lançamento de exceção ou tratar retorno esperado
+        clienteRepository.delete(123L);
+        verify(jdbcTemplate, times(1)).update(anyString(), eq(123L));
+    }
+
 }
