@@ -1,5 +1,6 @@
 package br.com.cbd.gestor_clientes.core.domain.usecase;
 
+import br.com.cbd.gestor_clientes.adapter.input.exception.BusinessException;
 import br.com.cbd.gestor_clientes.adapter.input.exception.NotFoundException;
 import br.com.cbd.gestor_clientes.adapter.output.repository.ClienteRepository;
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
@@ -45,22 +46,21 @@ class ClienteUseCaseTest {
     }
 
 
-
-
-
     @Test
     @DisplayName("Deve deletar cliente com sucesso")
     void deveDeletarClienteComSucesso() {
-        when(outputPort.findById(1L)).thenReturn(Optional.of(cliente));
+        Long id = 1L;
+        when(outputPort.findById(id)).thenReturn(Optional.of(cliente));
         when(outputPort.update(any(Cliente.class))).thenReturn(cliente);
-        doNothing().when(repository).delete(1L);
+        doNothing().when(repository).delete(id);
 
-        useCase.delete(1L);
+        useCase.delete(id);
 
-        verify(outputPort).findById(1L);
+        verify(outputPort).findById(id);
         verify(outputPort).update(any(Cliente.class));
-        verify(repository).delete(1L);
+        verify(repository).delete(id);
     }
+
 
 
 
@@ -163,6 +163,7 @@ class ClienteUseCaseTest {
         assertFalse(list.isEmpty());
         assertEquals("Nome Teste", list.get(0).getNome());
     }
+
     @Test
     @DisplayName("validarCpf deve aceitar CPF válido")
     void deveAceitarCpfValido() {
@@ -178,6 +179,29 @@ class ClienteUseCaseTest {
         assertFalse(useCase.validarCpf("00000000000"));
     }
 
+    // metodo utilitário para invocar metodo privado validarClienteParaCriacao
+    private void invokeValidarClienteParaCriacao(ClienteUseCase useCase, Cliente cliente) {
+        try {
+            var method = ClienteUseCase.class.getDeclaredMethod("validarClienteParaCriacao", Cliente.class);
+            method.setAccessible(true);
+            method.invoke(useCase, cliente);
+        } catch (Exception e) {
+            if (e.getCause() instanceof RuntimeException)
+                throw (RuntimeException) e.getCause();
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Test
+    @DisplayName("validarClienteParaCriacao deve lançar BusinessException para cliente inválido")
+    void deveLancarExcecaoValidarClienteParaCriacao() {
+        Cliente clienteInvalido = new Cliente();
+        // deixar dados inválidos intencionalmente
+        clienteInvalido.setNome("Jo"); // nome muito curto
+        clienteInvalido.setEmail("email@valido.com");
+        clienteInvalido.setCpf("11144477735");
+        clienteInvalido.setStatus("ATIVO");
 
+        assertThrows(BusinessException.class, () -> invokeValidarClienteParaCriacao(useCase, clienteInvalido));
+    }
 }
