@@ -11,7 +11,7 @@ collection:
     meta:
       id: req_86e0dfd8edc4463ab30139fac1f7fb35
       created: 1755556082377
-      modified: 1755640217083
+      modified: 1756771304577
       isPrivate: false
       description: ""
       sortKey: -1755556082377
@@ -27,12 +27,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: "{{ _.url }}/clientes/4"
+  - url: "{{ _.url }}/clientes/3"
     name: Listar cliente por id
     meta:
       id: req_fe85d40bbe4f4d3c87a23be9f908d4d8
       created: 1755557965827
-      modified: 1755729708326
+      modified: 1756856006143
       isPrivate: false
       description: ""
       sortKey: -1755553757489.5
@@ -53,7 +53,7 @@ collection:
     meta:
       id: req_bddd63db767f4e63aabb487af436b636
       created: 1755558830567
-      modified: 1755725311692
+      modified: 1757098096855
       isPrivate: false
       description: ""
       sortKey: -1755558830567
@@ -62,9 +62,10 @@ collection:
       mimeType: application/json
       text: |
         {   
-        	 "nome": "Ahsoka Tano",
+        	 	"nome": "Ahsoka Tano",
         		"email": "ahsokatano@mail.com",
         		"telefone": "+55 (11) 99988-8899",
+        		"cpf": "111.444.777-35",
         		"status": "PROSPECT"
         }
     headers:
@@ -83,9 +84,9 @@ collection:
   - url: "{{ _.url }}/clientes"
     name: Criar cliente
     meta:
-      id: req_d5a512d727d649cc852ae23ed7a3b6ea
+      id: req_ada3736ba3144236a8be4b58a1dac527
       created: 1755565429812
-      modified: 1755737582327
+      modified: 1757113031123
       isPrivate: false
       description: ""
       sortKey: -1755565429812
@@ -94,10 +95,10 @@ collection:
       mimeType: application/json
       text: |-
         {
-        		"nome": "Leia Organa",
-        		"email": "leiaorgana@mail.com",
-        		"telefone": "+5591 98877-7766",
-        		"cpf": "752.627.530-43",
+        		"nome": "Sabine Wren",
+        		"email": "sabinewren@mail.com",
+        		"telefone": "+5591 98866-7799",
+        		"cpf": "788.772.450-34",
         		"status": "ATIVO"
         }
     headers:
@@ -113,12 +114,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: "{{ _.url }}/clientes/1"
+  - url: "{{ _.url }}/clientes/2"
     name: Deletar cliente
     meta:
       id: req_146c6b2dd26046488de5dda51bfdd462
       created: 1755639296259
-      modified: 1755718927731
+      modified: 1756320539152
       isPrivate: false
       description: ""
       sortKey: -1755639296259
@@ -139,7 +140,7 @@ collection:
     meta:
       id: req_575216f8c8ae4e9d811578cc8bccd2e4
       created: 1755909713021
-      modified: 1755910704906
+      modified: 1756330681229
       isPrivate: false
       description: ""
       sortKey: -1755909713021
@@ -147,6 +148,27 @@ collection:
     headers:
       - name: User-Agent
         value: insomnia/11.4.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/clientes/ativos/count"
+    name: Contar Clientes Ativos
+    meta:
+      id: req_a82a1774b18443eeb430b502b00c5eb7
+      created: 1757114422530
+      modified: 1757114442869
+      isPrivate: false
+      description: ""
+      sortKey: -1757114422530
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.5.0
     settings:
       renderRequestBody: true
       encodeUrl: true

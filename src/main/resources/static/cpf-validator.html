@@ -49,6 +49,7 @@
           })
           .catch((error) => {
             document.getElementById("result").innerText = "Erro ao validar CPF. Verifique o formato ou tente novamente.";
+            console.error("Erro:", error);
           });
       }
       function limpar() {
