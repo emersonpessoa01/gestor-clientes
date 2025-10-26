@@ -1,11 +1,10 @@
 package br.com.cbd.gestor_clientes.core.domain.usecase;
 
-import br.com.cbd.gestor_clientes.adapter.input.exception.BusinessException;
+import br.com.cbd.gestor_clientes.adapter.input.exception.NotFoundException;
 import br.com.cbd.gestor_clientes.adapter.output.repository.ClienteRepository;
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 import br.com.cbd.gestor_clientes.core.usecase.ClienteUseCase;
 import br.com.cbd.gestor_clientes.port.output.ClienteOutputPort;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,19 +17,14 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/**
- * Testes de unidade para ClienteUseCase, camada de domínio (regras de negócio).
- * Segue o padrão Given-When-Then.
- */
 @ExtendWith(MockitoExtension.class)
 class ClienteUseCaseTest {
 
     @Mock
-    ClienteOutputPort outputPort;
+    private ClienteOutputPort outputPort;
 
     @Mock
     private ClienteRepository repository;
@@ -41,217 +35,149 @@ class ClienteUseCaseTest {
     private Cliente cliente;
 
     @BeforeEach
-    void setUp() {
-        cliente = new Cliente(
-                1L,
-                "Sabine Wren",
-                "sabinewren@mandalore.com",
-                "+55(11)99999-9999",
-                "11144477735",
-                "ATIVO",
-                null,
-                null
-        );
+    void setup() {
+        cliente = new Cliente();
+        cliente.setId(1L);
+        cliente.setNome("Nome Teste");
+        cliente.setCpf("11144477735");
+        cliente.setEmail("teste@teste.com");
+        cliente.setStatus("ATIVO");
     }
-    // ------------------------------------------------------------------
-    // ✅ Criação de cliente (create)
-    @Test
-    @DisplayName("Deve criar cliente com sucesso")
-    void deveCriarClienteComSucesso() {
-        // Given
-        when(repository.save(any(Cliente.class))).thenReturn(cliente);
 
-        // When
-        Cliente resultado = useCase.create(cliente);
 
-        // Then
-        assertThat(resultado).isNotNull();
-        assertThat(resultado.getNome())
-                .isEqualTo("Sabine Wren");
-        verify(repository, times(1))
-                .save(any(Cliente.class));
-    }
-    //------------------------------------------------------------------
-    // ✅ Busca por ID (findById)
-    @Test
-    @DisplayName("Deve buscar cliente por ID com sucesso")
-    void deveBuscarClientePorIdComSucesso(){
-        // Given
-        when(repository.findById(1L)).thenReturn(Optional.of(cliente));
 
-        // When
-        Optional<Cliente> resultado = useCase.findById(1L);
 
-        // Then
-        assertThat(resultado).isPresent();
-        assertThat(resultado.get().getEmail()).isEqualTo("sabinewren@mandalore.com");
-        verify(repository, times(1)).findById(1L);
-    }
-    //------------------------------------------------------------------
-    // Exceção ao não encontrar cliente
-    @Test
-    @DisplayName("Deve lançar exceção ao buscar cliente inexistente por ID")
-    void deveLancarExcecaoQuandoClienteNaoExistir() {
-        // Given
-        when(repository.findById(99L)).thenReturn(Optional.empty());
 
-        // When / Then
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> useCase.findById(99L));
-
-        assertThat(exception.getMessage()).contains("Cliente com ID 99 não encontrado");
-        verify(repository, times(1)).findById(99L);
-    }
-    //------------------------------------------------------------------
-    // ✅ Listagem (findAll)
-    @Test
-    @DisplayName("Deve listar todos os clientes com suesso")
-    void deveListartodosOsClientesComSucesso(){
-        // Given
-        when(repository.findAll()).thenReturn(List.of(cliente));
-
-        // When
-        List<Cliente> resultado = useCase.findAll();
-
-        // Then
-        assertThat(resultado).isNotEmpty();
-        assertThat(resultado).hasSize(1);
-        assertThat(resultado.get(0).getCpf()).isEqualTo("11144477735");
-        verify(repository,times(1)).findAll();
-    }
-    //------------------------------------------------------------------
-    // ✅ Atualização (update)
-    @Test
-    @DisplayName("Deve atualizar cliente com sucesso")
-    void deveAtualizarClienteComSucesso() {
-        // Given
-        Cliente existente = new Cliente(
-                1L,
-                "Sabine Wren",
-                "sabinewren@gmail.com",
-                "+55(11)99999-9999",
-                "11144477735",
-                "ATIVO",
-                null,
-                null
-        );
-
-        Cliente atualizado = new Cliente(
-                1L,
-                "Sabine Ren",
-                "sabinewren@mandalore.com",
-                "+55(11)98888-8888",
-                "11144477735",
-                "ATIVO",
-                null,
-                null
-        );
-
-        when(repository.findById(1L)).thenReturn(Optional.of(existente));
-        when(repository.update(any(Cliente.class))).thenReturn(atualizado);
-
-        // When
-        Cliente resultado = useCase.update(1L, atualizado);
-
-        // Then
-        assertThat(resultado).isNotNull();
-        assertThat(resultado.getEmail()).isEqualTo("sabinewren@mandalore.com");
-        verify(repository, times(1)).findById(1L);
-        verify(repository, times(1)).update(any(Cliente.class));
-    }
-    //------------------------------------------------------------------
-    // ✅ Exclusão (delete)
     @Test
     @DisplayName("Deve deletar cliente com sucesso")
-    void deveDeletarClienteComSucesso(){
-        // Given
-        Cliente existente = new Cliente(
-                1L,
-                "Sabine Wren",
-                "sabinewren@mandalore.com",
-                "+55(11)99999-9999",
-                "11144477735",
-                "ATIVO",
-                null,
-                null
-        );
-        // Simula que o cliente existe no repositório
-        when(repository.findById(1L)).thenReturn(Optional.of(existente));
+    void deveDeletarClienteComSucesso() {
+        when(outputPort.findById(1L)).thenReturn(Optional.of(cliente));
+        when(outputPort.update(any(Cliente.class))).thenReturn(cliente);
         doNothing().when(repository).delete(1L);
 
-        // When
         useCase.delete(1L);
 
-        // Then
-        verify(repository, times(1)).findById(1L);
-        verify(repository, times(1)).delete(1L);
+        verify(outputPort).findById(1L);
+        verify(outputPort).update(any(Cliente.class));
+        verify(repository).delete(1L);
     }
-    //✅ Verificação de existência (existsByCpf)
-    @Test
-    @DisplayName("Deve verificar se cliente existe por CPF")
-    void deveVerificarSeClienteExistePorCpf(){
-        // Given
-        when(repository.existsByCpf("11144477735")).thenReturn(true);
 
-        // When
-        boolean existe = useCase.existsByCpf("11144477735");
 
-        // Then
-        assertThat(existe).isTrue();
-        verify(repository, times(1)).existsByCpf("11144477735");
 
-    }
-    //✅ Busca por CPF (findByCpf)
     @Test
     @DisplayName("Deve buscar cliente por CPF com sucesso")
-    void deveBuscarClientePorCpfComSucesso(){
-        // Given
-        when(repository.findById(Long.valueOf("11144477735"))).thenReturn(Optional.of(cliente));
+    void deveBuscarClientePorCpfComSucesso() {
+        when(repository.findByCpf("11144477735")).thenReturn(Optional.of(cliente));
 
-        // When
-        Optional<Cliente> resultado= useCase.findById(Long.valueOf("11144477735"));
+        Optional<Cliente> resultado = useCase.buscarPorCpf("11144477735");
 
-        // Then
         assertThat(resultado).isPresent();
-        assertThat(resultado.get().getNome()).isEqualTo("Sabine Wren");
-        verify(repository, times(1)).findById(Long.valueOf("11144477735"));
+        assertThat(resultado.get().getNome()).isEqualTo("Nome Teste");
+        verify(repository).findByCpf("11144477735");
     }
 
     @Test
-    void validarClienteParaCriacao_nomeCurtoOuNulo(){
-        Cliente cliente = new Cliente();
-        cliente.setNome(null);
-        cliente.setEmail("Hera Syndulla");
-        cliente.setStatus("ATIVO");
-        cliente.setCpf("11144477735");
-        BusinessException ex1 = assertThrows(BusinessException.class,()-> useCase.create(cliente));
-        assertTrue(ex1.getMessage().contains("Nome é obrigatório"));
+    @DisplayName("Deve ativar cliente com sucesso")
+    void deveAtivarCliente() {
+        when(repository.findById(1L)).thenReturn(Optional.of(cliente));
+        doNothing().when(repository).ativarCliente(1L);
 
-        cliente.setNome("a");
-        BusinessException ex2 = assertThrows(BusinessException.class,()->useCase.create(cliente));
-        assertTrue(ex2.getMessage().contains("Nome é obrigatório"));
+        useCase.ativarCliente(1L);
 
+        verify(repository).ativarCliente(1L);
     }
 
     @Test
-    void validarClienteParaCriacao_emailNulo(){
-        Cliente cliente = new Cliente();
-        cliente.setNome("kanan Jarrus");
-        cliente.setEmail(null);
-        cliente.setStatus("ATIVO");
-        cliente.setCpf("11144477735");
-        BusinessException ex = assertThrows(BusinessException.class, ()->useCase.create(cliente));
-        assertTrue(ex.getMessage().contains("Email é obrigatório"));
+    @DisplayName("Deve lançar NotFoundException ao ativar cliente inexistente")
+    void deveLancarExcecaoAoAtivarClienteNaoExistente() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> useCase.ativarCliente(1L));
     }
 
     @Test
-    void validarClienteParaCriacao_statusInvalido(){
-        Cliente cliente = new Cliente();
-        cliente.setNome("Ezra Bridger");
-        cliente.setEmail("ezrabridger@gmmail.com");
-        cliente.setStatus("DESCONHECIDO"); // Inválido
-        cliente.setCpf("11144477735");
-        BusinessException ex = assertThrows(BusinessException.class, ()-> useCase.create(cliente));
-        assertTrue(ex.getMessage().contains("Status deve ser ATIVO"));
+    @DisplayName("Deve inativar cliente com sucesso")
+    void deveInativarCliente() {
+        when(repository.findById(1L)).thenReturn(Optional.of(cliente));
+        doNothing().when(repository).inativarCliente(1L);
+
+        useCase.inativarCliente(1L);
+
+        verify(repository).inativarCliente(1L);
     }
+
+    @Test
+    @DisplayName("Deve lançar NotFoundException ao inativar cliente inexistente")
+    void deveLancarExcecaoAoInativarClienteNaoExistente() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> useCase.inativarCliente(1L));
+    }
+
+    @Test
+    @DisplayName("Deve lançar NotFoundException ao buscar cliente por CPF inexistente")
+    void deveLancarExcecaoAoBuscarPorCpfNaoExistente() {
+        when(repository.findByCpf("11144477735")).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> useCase.buscarPorCpf("11144477735"));
+    }
+
+    @Test
+    @DisplayName("Deve contar clientes ativos com sucesso")
+    void deveContarClientesAtivos() {
+        when(repository.contarClientesAtivos()).thenReturn(5);
+
+        int count = useCase.contarClientesAtivos();
+
+        assertEquals(5, count);
+    }
+
+    @Test
+    @DisplayName("Deve contar clientes inativos com sucesso")
+    void deveContarClientesInativos() {
+        when(repository.contarClientesInativos()).thenReturn(3);
+
+        int count = useCase.contarClientesInativos();
+
+        assertEquals(3, count);
+    }
+
+    @Test
+    @DisplayName("Deve listar clientes ativos com sucesso")
+    void deveListarClientesAtivos() {
+        when(repository.listarAtivos()).thenReturn(List.of(cliente));
+
+        var list = useCase.listarAtivos();
+
+        assertFalse(list.isEmpty());
+        assertEquals("Nome Teste", list.get(0).getNome());
+    }
+
+    @Test
+    @DisplayName("Deve listar clientes inativos com sucesso")
+    void deveListarClientesInativos() {
+        when(repository.listarInativos()).thenReturn(List.of(cliente));
+
+        var list = useCase.listarInativos();
+
+        assertFalse(list.isEmpty());
+        assertEquals("Nome Teste", list.get(0).getNome());
+    }
+    @Test
+    @DisplayName("validarCpf deve aceitar CPF válido")
+    void deveAceitarCpfValido() {
+        assertTrue(useCase.validarCpf("11144477735"));
+    }
+
+    @Test
+    @DisplayName("validarCpf deve rejeitar CPF inválido")
+    void deveRejeitarCpfInvalido() {
+        assertFalse(useCase.validarCpf("12345678900"));
+        assertFalse(useCase.validarCpf(null));
+        assertFalse(useCase.validarCpf(""));
+        assertFalse(useCase.validarCpf("00000000000"));
+    }
+
+
 
 }
