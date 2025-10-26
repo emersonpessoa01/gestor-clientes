@@ -64,16 +64,17 @@ public class ClienteUseCase implements ClienteInputPort {
 
 
     public void delete(Long id) {
-        Optional<Cliente> cliente = clienteOutputPort.findById(id);
-        if (cliente.isEmpty()) {
+        Optional<Cliente> clienteOpt = clienteOutputPort.findById(id);
+        if (clienteOpt.isEmpty()) {
             throw new NotFoundException("Cliente não encontrado.");
         }
-        Cliente clienteAtualizado = cliente.get();
-        clienteAtualizado.setStatus("INATIVO");
-        clienteAtualizado.setAtualizadoEm(LocalDateTime.now());
-        clienteOutputPort.update(clienteAtualizado);
-        clienteRepository.delete(1L);
+        Cliente cliente = clienteOpt.get();
+        cliente.setStatus("INATIVO");
+        cliente.setAtualizadoEm(LocalDateTime.now());
+        clienteOutputPort.update(cliente);
+        clienteRepository.delete(id);
     }
+
 
 
     public Optional<Cliente> findById(Long id) {
