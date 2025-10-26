@@ -232,4 +232,15 @@ class ClienteUseCaseTest {
 
     }
 
+    @Test
+    void validarClienteParaCriacao_emailNulo(){
+        Cliente cliente = new Cliente();
+        cliente.setNome("kanan Jarrus");
+        cliente.setEmail(null);
+        cliente.setStatus("ATIVO");
+        cliente.setCpf("11144477735");
+        BusinessException ex = assertThrows(BusinessException.class, ()->useCase.create(cliente));
+        assertTrue(ex.getMessage().contains("Email é obrigatório"));
+    }
+
 }
