@@ -1,8 +1,11 @@
 package br.com.cbd.gestor_clientes.core.domain.usecase;
 
+import br.com.cbd.gestor_clientes.adapter.input.exception.BusinessException;
 import br.com.cbd.gestor_clientes.adapter.output.repository.ClienteRepository;
 import br.com.cbd.gestor_clientes.core.domain.model.Cliente;
 import br.com.cbd.gestor_clientes.core.usecase.ClienteUseCase;
+import br.com.cbd.gestor_clientes.port.output.ClienteOutputPort;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
@@ -24,6 +28,9 @@ import static org.mockito.Mockito.*;
  */
 @ExtendWith(MockitoExtension.class)
 class ClienteUseCaseTest {
+
+    @Mock
+    ClienteOutputPort outputPort;
 
     @Mock
     private ClienteRepository repository;
@@ -207,6 +214,22 @@ class ClienteUseCaseTest {
         assertThat(resultado).isPresent();
         assertThat(resultado.get().getNome()).isEqualTo("Sabine Wren");
         verify(repository, times(1)).findById(Long.valueOf("11144477735"));
+    }
+
+    @Test
+    void validarClienteParaCriacao_nomeCurtoOuNulo(){
+        Cliente cliente = new Cliente();
+        cliente.setNome(null);
+        cliente.setEmail("Hera Syndulla");
+        cliente.setStatus("ATIVO");
+        cliente.setCpf("11144477735");
+        BusinessException ex1 = assertThrows(BusinessException.class,()-> useCase.create(cliente));
+        assertTrue(ex1.getMessage().contains("Nome é obrigatório"));
+
+        cliente.setNome("a");
+        BusinessException ex2 = assertThrows(BusinessException.class,()->useCase.create(cliente));
+        assertTrue(ex2.getMessage().contains("Nome é obrigatório"));
+
     }
 
 }
