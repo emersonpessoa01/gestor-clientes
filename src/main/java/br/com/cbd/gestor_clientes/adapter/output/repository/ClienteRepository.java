@@ -97,8 +97,12 @@ public class ClienteRepository implements ClienteOutputPort {
                 entity.getStatus(), entity.getAtualizadoEm(), entity.getId());
         String selectSql = "SELECT * FROM cliente WHERE id = ?";
         ClienteEntity updatedEntity = jdbcTemplate.queryForObject(selectSql, rowMapper, entity.getId());
+        if (updatedEntity == null) {
+            throw new RuntimeException("Cliente não encontrado para atualização!");
+        }
         return toDomain(updatedEntity);
     }
+
 
     @Override
     public void delete(Long id) {
